@@ -17,10 +17,6 @@
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-		maven {
-			name = "cbts"
-			url = "https://raw.githubusercontent.com/Celestibytes/files/master/"
-		}
     }
     dependencies {
         classpath 'io.github.celestibytes:CelestiGradle:3.0-SNAPSHOT'
