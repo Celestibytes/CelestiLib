@@ -19,49 +19,23 @@
         }
     }
     dependencies {
-        // classpath 'io.github.celestibytes:CelestiGradle:3.0.0'
+        classpath 'io.github.celestibytes:CelestiGradle:3.0.0'
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'signing'
 
 // import static celestibytes.gradle.CelestiGradlePlugin.*
 
-version = '0.1.4'// versionNumber('0.1.4')
-// basePackage('celestibytes.lib')
-// artifactsList(['javadoc', 'sources'])
-// depsFile()
+version = versionNumber('0.1.4')
+basePackage('celestibytes.lib')
+artifactsList(['javadoc', 'sources'])
+depsFile()
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-	compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
-	compile 'com.google.guava:guava:18.0'
-}
-
-// apply plugin: 'celestibytes'
+apply plugin: 'celestibytes'
 
 group 'io.github.celestibytes'
 archivesBaseName = project.getName()
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives jar, javadocJar, sourcesJar
-}
 
 signing {
     required {gradle.taskGraph.hasTask("uploadArchives")}
