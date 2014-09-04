@@ -19,15 +19,15 @@
         }
     }
     dependencies {
-        classpath 'io.github.celestibytes:CelestiGradle:3.0.0'
+        classpath 'io.github.celestibytes:CelestiGradle:3.0.2'
     }
 }
 
 apply plugin: 'signing'
 
-// import static celestibytes.gradle.CelestiGradlePlugin.*
+import static celestibytes.gradle.CelestiGradlePlugin.*
 
-version = versionNumber('0.1.4')
+version = versionNumber('0.2.0')
 basePackage('celestibytes.lib')
 artifactsList(['javadoc', 'sources'])
 depsFile()
