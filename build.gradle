@@ -20,14 +20,15 @@
 		maven {
 			name = "cbts"
 			url = "https://raw.githubusercontent.com/Celestibytes/files/master/"
-		}	
+		}
     }
     dependencies {
         classpath 'io.github.celestibytes:CelestiGradle:3.0-SNAPSHOT'
     }
 }
 
-apply plugin: 'maven'
+// apply plugin: 'maven'
+apply plugin: 'signing'
 
 import static celestibytes.gradle.CelestiGradlePlugin.*
 
@@ -36,10 +37,15 @@ basePackage('celestibytes.lib')
 artifactsList(['javadoc', 'sources'])
 depsFile()
 
+apply plugin: 'celestibytes'
+
 group 'io.github.celestibytes'
 archivesBaseName = project.getName()
 
-apply plugin: 'celestibytes'
+signing {
+    required {gradle.taskGraph.hasTask("uploadArchives")}
+    sign configurations.archives
+}
 
 uploadArchives {
     repositories {
