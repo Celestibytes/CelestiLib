@@ -134,17 +134,9 @@ public final class Version implements Comparable<Version>
      * @param s
      *            the {@link String} representing the {@link Version}.
      * @return the {@link Version} represented by the {@link String}.
-     * @throws VersionFormatException
-     *             if the {@link String} does not contain a parsable
-     *             {@link Version}.
      */
-    public static Version parse(String s) throws VersionFormatException
+    public static Version parse(String s)
     {
-        if (s == null || s.equals(""))
-        {
-            throw new VersionFormatException("Version may not be null or empty");
-        }
-        
         String major = "";
         String minor = "";
         String patch = "";
@@ -193,11 +185,6 @@ public final class Version implements Comparable<Version>
             {
                 dots++;
             }
-        }
-        
-        if (dots < 3 && qualifier.equalsIgnoreCase(""))
-        {
-            throw new VersionFormatException("Version is too short");
         }
         
         return qualifier.equals("") ? new Version(major, minor, patch) : new Version(major, minor, patch, qualifier,
