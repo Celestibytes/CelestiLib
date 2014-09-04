@@ -1,0 +1,114 @@
+/**
+ * Celestibytes's Common Java Library
+ * CelestiLib
+ *
+ * Master build file
+ *
+ * @author PizzAna
+ */
+ buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven/"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+		maven {
+			name = "cbts"
+			url = "https://raw.githubusercontent.com/Celestibytes/files/master/"
+		}	
+    }
+    dependencies {
+        classpath 'io.github.celestibytes:CelestiGradle:3.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'maven'
+
+import static celestibytes.gradle.CelestiGradlePlugin.*
+
+version = versionNumber('0.1.0')
+basePackage('celestibytes.lib')
+artifactsList(['javadoc', 'sources'])
+depsFile()
+
+group 'io.github.celestibytes'
+archivesBaseName = project.getName()
+
+apply plugin: 'celestibytes'
+
+uploadArchives {
+    repositories {
+        if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword"))
+        {
+            mavenDeployer {
+                beforeDeployment {MavenDeployment deployment -> signing.signPom(deployment)}
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
+                }
+
+                pom.project {
+                    name project.archivesBaseName
+                    packaging 'jar'
+                    description 'Celestibytes\'s Common Java Library.'
+                    url 'https://github.com/Celestibytes/CelestiLib'
+
+                    scm {
+                        url 'https://github.com/Celestibytes/CelestiLib'
+                        connection 'scm:git:git://github.com/Celestibytes/CelestiLib.git'
+                        developerConnection 'scm:git:git@github.com:Celestibytes/CelestiLib.git'
+                    }
+
+                    issueManagement {
+                        system 'github'
+                        url 'https://github.com/Celestibytes/CelestiLib/issues'
+                    }
+
+					licenses {
+                        license {
+                            name 'GNU LESSER GENERAL PUBLIC LICENSE v3'
+                            url 'http://www.gnu.org/licenses/lgpl-3.0.html'
+                        }
+                    }
+                    
+                    developers {
+                        developer {
+                            id 'pizzana'
+                            name 'PizzAna'
+                            roles {role 'developer'}
+                        }
+						developer {
+							id 'okkapel'
+							name 'Okkapel'
+							roles {role 'developer'}
+						}
+                    }
+                }
+            }
+        }
+        else
+        {
+            add project.repositories.mavenLocal()
+            logger.info('Publishing to repo folder')
+
+            mavenDeployer {
+                repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
+            }
+        }
+    }
+}
