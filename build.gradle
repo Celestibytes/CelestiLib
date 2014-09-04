@@ -23,12 +23,11 @@
     }
 }
 
-// apply plugin: 'maven'
 apply plugin: 'signing'
 
 import static celestibytes.gradle.CelestiGradlePlugin.*
 
-version = versionNumber('0.1.0')
+version = versionNumber('0.1.3')
 basePackage('celestibytes.lib')
 artifactsList(['javadoc', 'sources'])
 depsFile()
