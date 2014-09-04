@@ -19,7 +19,7 @@
         }
     }
     dependencies {
-        classpath 'io.github.celestibytes:CelestiGradle:3.0-SNAPSHOT'
+        classpath 'io.github.celestibytes:CelestiGradle:3.0.1'
     }
 }
 
