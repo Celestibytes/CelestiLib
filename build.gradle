@@ -17,26 +17,38 @@
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-		maven {
+		/* maven {
 			name = "cbts"
 			url = "https://raw.githubusercontent.com/Celestibytes/files/master/"
-		}
+		} */
     }
-    dependencies {
-        classpath 'io.github.celestibytes:CelestiGradle:3.0.1'
-    }
+    /* dependencies {
+        classpath 'io.github.celestibytes:CelestiGradle:3.0.0'
+    } */
 }
 
+apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'signing'
 
-import static celestibytes.gradle.CelestiGradlePlugin.*
+// import static celestibytes.gradle.CelestiGradlePlugin.*
 
-version = versionNumber('0.1.3')
-basePackage('celestibytes.lib')
-artifactsList(['javadoc', 'sources'])
-depsFile()
+version = '0.1.4'// versionNumber('0.1.4')
+// basePackage('celestibytes.lib')
+// artifactsList(['javadoc', 'sources'])
+// depsFile()
 
-apply plugin: 'celestibytes'
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+	compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+	compile 'com.google.guava:guava:18.0'
+}
+
+// apply plugin: 'celestibytes'
 
 group 'io.github.celestibytes'
 archivesBaseName = project.getName()
