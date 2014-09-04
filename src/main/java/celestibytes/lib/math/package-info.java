@@ -13,11 +13,11 @@
  */
 
 /**
- * This package contains classes for handling all kinds of derps.
+ * This package contains math related utility classes.
  *
  * @author PizzAna
  *
  */
 
-package celestibytes.lib.derp;
+package celestibytes.lib.math;
 

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -30,27 +30,27 @@ public final class Version implements Comparable<Version>
      * The major version number.
      */
     public final int major;
-
+    
     /**
      * The minor version number.
      */
     public final int minor;
-
+    
     /**
      * The patch version number.
      */
     public final int patch;
-
+    
     /**
      * The version qualifier.
      */
     public final String qualifier;
-
+    
     /**
      * The version's build.
      */
     public final int build;
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -66,7 +66,7 @@ public final class Version implements Comparable<Version>
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch));
     }
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -82,7 +82,7 @@ public final class Version implements Comparable<Version>
     {
         this(major, minor, patch, null, 0);
     }
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -103,7 +103,7 @@ public final class Version implements Comparable<Version>
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), qualifier, Integer
                 .parseInt(build));
     }
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -127,7 +127,7 @@ public final class Version implements Comparable<Version>
         this.qualifier = qualifier;
         this.build = build;
     }
-
+    
     /**
      * Parses a {@link Version} from the given {@link String}.
      *
@@ -144,7 +144,7 @@ public final class Version implements Comparable<Version>
         {
             throw new VersionFormatException("Version may not be null or empty");
         }
-
+        
         String major = "";
         String minor = "";
         String patch = "";
@@ -153,7 +153,7 @@ public final class Version implements Comparable<Version>
         List<Character> chars = Lists.charactersOf(s);
         boolean hyphen = false;
         int dots = 0;
-
+        
         for (char c : chars)
         {
             if (c != '.')
@@ -194,19 +194,19 @@ public final class Version implements Comparable<Version>
                 dots++;
             }
         }
-
+        
         if (dots < 3 && qualifier.equalsIgnoreCase(""))
         {
             throw new VersionFormatException("Version is too short");
         }
-
+        
         return qualifier.equals("") ? new Version(major, minor, patch) : new Version(major, minor, patch, qualifier,
                 build);
     }
-
+    
     /**
      * Tells if the {@link Version} is stable according to the data.
-     * 
+     *
      * @return {@code true} if the {@link Version} represents a stable release,
      *         otherwise {@code false}.
      */
@@ -214,10 +214,10 @@ public final class Version implements Comparable<Version>
     {
         return qualifier.equalsIgnoreCase("") || qualifier == null;
     }
-
+    
     /**
      * Tells if the {@link Version} is beta according to the data.
-     * 
+     *
      * @return {@code true} if the {@link Version} represents a beta release,
      *         otherwise {@code false}.
      */
@@ -225,10 +225,10 @@ public final class Version implements Comparable<Version>
     {
         return qualifier.equalsIgnoreCase("beta");
     }
-
+    
     /**
      * Tells if the {@link Version} is alpha according to the data.
-     * 
+     *
      * @return {@code true} if the {@link Version} represents a alpha release,
      *         otherwise {@code false}.
      */
@@ -236,10 +236,10 @@ public final class Version implements Comparable<Version>
     {
         return qualifier.equalsIgnoreCase("alpha");
     }
-
+    
     /**
      * Tells if the {@link Version} is snapshot according to the data.
-     * 
+     *
      * @return {@code true} if the {@link Version} represents a snapshot
      *         release, otherwise {@code false}.
      */
@@ -247,7 +247,7 @@ public final class Version implements Comparable<Version>
     {
         return qualifier.equalsIgnoreCase("SNAPSHOT");
     }
-
+    
     /**
      * Compares this object with the specified object for order. Returns a
      * negative integer, zero, or a positive integer as this object is less
@@ -302,62 +302,62 @@ public final class Version implements Comparable<Version>
         {
             throw new NullPointerException();
         }
-
+        
         if (major != o.major)
         {
             return major < o.major ? -1 : 1;
         }
-
+        
         if (minor != o.minor)
         {
             return minor < o.minor ? -1 : 1;
         }
-
+        
         if (patch != o.patch)
         {
             return patch < o.patch ? -1 : 1;
         }
-
+        
         if (isStable() && !o.isStable())
         {
             return 1;
         }
-
+        
         if (isSnapshot() && !o.isSnapshot())
         {
             return -1;
         }
-
+        
         if (isAlpha() && o.isSnapshot())
         {
             return 1;
         }
-
+        
         if (isAlpha() && !o.isAlpha())
         {
             return -1;
         }
-
+        
         if (isBeta() && o.isSnapshot())
         {
             return 1;
         }
-
+        
         if (isBeta() && o.isAlpha())
         {
             return 1;
         }
-
+        
         if (isBeta() && !o.isBeta())
         {
             return -1;
         }
-
+        
         if (!isStable() && o.isStable())
         {
             return -1;
         }
-
+        
         if (qualifier.equals(o.qualifier))
         {
             if (build != o.build)
@@ -365,10 +365,10 @@ public final class Version implements Comparable<Version>
                 return build < o.build ? -1 : 1;
             }
         }
-
+        
         return 0;
     }
-
+    
     @Override
     public int hashCode()
     {
@@ -381,7 +381,7 @@ public final class Version implements Comparable<Version>
         result = prime * result + (qualifier == null ? 0 : qualifier.hashCode());
         return result;
     }
-
+    
     @Override
     public boolean equals(Object obj)
     {
@@ -389,39 +389,39 @@ public final class Version implements Comparable<Version>
         {
             return true;
         }
-
+        
         if (obj == null)
         {
             return false;
         }
-
+        
         if (!(obj instanceof Version))
         {
             return false;
         }
-
+        
         Version other = (Version) obj;
-
+        
         if (build != other.build)
         {
             return false;
         }
-
+        
         if (major != other.major)
         {
             return false;
         }
-
+        
         if (minor != other.minor)
         {
             return false;
         }
-
+        
         if (patch != other.patch)
         {
             return false;
         }
-
+        
         if (qualifier == null)
         {
             if (other.qualifier != null)
@@ -433,10 +433,10 @@ public final class Version implements Comparable<Version>
         {
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public String toString()
     {
