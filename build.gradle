@@ -6,36 +6,30 @@
  *
  * @author PizzAna
  */
- buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven/"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'io.github.celestibytes:CelestiGradle:3.0.2'
-    }
-}
 
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'signing'
 
-import static celestibytes.gradle.CelestiGradlePlugin.*
-
-version = versionNumber('0.2.0')
-basePackage('celestibytes.lib')
-artifactsList(['javadoc', 'sources'])
-depsFile()
-
-apply plugin: 'celestibytes'
-
+version = '0.3-SNAPSHOT'
 group 'io.github.celestibytes'
 archivesBaseName = project.getName()
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar, javadocJar, sourcesJar
+}
 
 signing {
     required {gradle.taskGraph.hasTask("uploadArchives")}

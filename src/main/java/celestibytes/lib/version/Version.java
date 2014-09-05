@@ -208,7 +208,7 @@ public final class Version implements Comparable<Version>
      */
     public boolean isStable()
     {
-        return qualifier.equalsIgnoreCase("") || qualifier == null;
+        return qualifier == null;
     }
     
     /**
