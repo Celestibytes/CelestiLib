@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -26,7 +26,7 @@ public class DerpException extends Exception
      * The serial version UID.
      */
     private static final long serialVersionUID = 3418533804520873407L;
-
+    
     /**
      * Constructs a new {@link DerpException}.
      */
@@ -34,7 +34,7 @@ public class DerpException extends Exception
     {
         super();
     }
-
+    
     /**
      * Constructs a new {@link DerpException}.
      *
@@ -45,7 +45,7 @@ public class DerpException extends Exception
     {
         super(message);
     }
-
+    
     /**
      * Constructs a new {@link DerpException}.
      *
@@ -58,7 +58,7 @@ public class DerpException extends Exception
     {
         super(message, cause);
     }
-
+    
     /**
      * Constructs a new {@link DerpException}.
      *

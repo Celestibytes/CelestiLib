@@ -38,7 +38,7 @@ public class Tuple<A, B>
     {
         return a;
     }
-
+    
     /**
      * @param a
      *            the a to set
@@ -47,7 +47,7 @@ public class Tuple<A, B>
     {
         this.a = a;
     }
-
+    
     /**
      * @return the b
      */
@@ -55,7 +55,7 @@ public class Tuple<A, B>
     {
         return b;
     }
-
+    
     /**
      * @param b
      *            the b to set
