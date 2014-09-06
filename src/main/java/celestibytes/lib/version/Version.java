@@ -26,7 +26,7 @@ import java.net.URL;
  * @author PizzAna
  *
  */
-public abstract class Version<V extends Version<V>> implements Comparable<V>
+public abstract class Version implements Comparable<Version>
 {
     /**
      * The major version number.
@@ -78,7 +78,7 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
      *             {@link Version}.
      */
     @SuppressWarnings("unused")
-    public static Version<?> parse(String s) throws VersionFormatException
+    public static Version parse(String s) throws VersionFormatException
     {
         String major = "";
         String minor = "";
@@ -182,10 +182,10 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
      *             if the {@link URL} does not contain a parsable
      *             {@link Version}.
      */
-    public static Version<?> parseFromUrl(URL url) throws VersionFormatException, MalformedURLException, IOException
+    public static Version parseFromUrl(URL url) throws VersionFormatException, MalformedURLException, IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        Version<?> ret = parse(reader.readLine());
+        Version ret = parse(reader.readLine());
         reader.close();
         return ret;
     }
@@ -203,7 +203,7 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
      * @throws VersionFormatException
      *             if the url does not contain a parsable {@link Version}.
      */
-    public static Version<?> parseFromUrl(String s) throws VersionFormatException, MalformedURLException, IOException
+    public static Version parseFromUrl(String s) throws VersionFormatException, MalformedURLException, IOException
     {
         return parseFromUrl(new URL(s));
     }
@@ -231,7 +231,7 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
     }
     
     @Override
-    public int compareTo(V o)
+    public int compareTo(Version o)
     {
         if (o == null)
         {
@@ -253,6 +253,11 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
             return -1;
         }
         
+        if (isRelease() && !o.isRelease())
+        {
+            return -1;
+        }
+        
         return 0;
     }
     
@@ -266,7 +271,6 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
         return result;
     }
     
-    @SuppressWarnings("rawtypes")
     @Override
     public boolean equals(Object obj)
     {

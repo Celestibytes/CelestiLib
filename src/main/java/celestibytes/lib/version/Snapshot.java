@@ -20,7 +20,7 @@ package celestibytes.lib.version;
  * @author PizzAna
  *
  */
-public class Snapshot extends Version<Snapshot>
+public class Snapshot extends Version
 {
     /**
      * The snapshot Maven qualifier.

@@ -20,7 +20,7 @@ package celestibytes.lib.version;
  * @author PizzAna
  *
  */
-public class Release extends Version<Release>
+public class Release extends Version
 {
     /**
      * The patch version number.
@@ -183,7 +183,7 @@ public class Release extends Version<Release>
     }
     
     @Override
-    public int compareTo(Release o)
+    public int compareTo(Version o)
     {
         if (o == null)
         {
@@ -195,51 +195,41 @@ public class Release extends Version<Release>
             return super.compareTo(o);
         }
         
-        if (patch != o.patch)
+        if (patch != ((Release) o).patch)
         {
-            return patch < o.patch ? -1 : 1;
+            return patch < ((Release) o).patch ? -1 : 1;
         }
         
-        if (isStable() && !o.isStable())
-        {
-            return 1;
-        }
-        
-        if (isAlpha() && o.isSnapshot())
+        if (isStable() && !((Release) o).isStable())
         {
             return 1;
         }
         
-        if (isAlpha() && !o.isAlpha())
+        if (isAlpha() && !((Release) o).isAlpha())
         {
             return -1;
         }
         
-        if (isBeta() && o.isSnapshot())
+        if (isBeta() && ((Release) o).isAlpha())
         {
             return 1;
         }
         
-        if (isBeta() && o.isAlpha())
-        {
-            return 1;
-        }
-        
-        if (isBeta() && !o.isBeta())
+        if (isBeta() && !((Release) o).isBeta())
         {
             return -1;
         }
         
-        if (!isStable() && o.isStable())
+        if (!isStable() && ((Release) o).isStable())
         {
             return -1;
         }
         
-        if (qualifier.equals(o.qualifier))
+        if (qualifier.equals(((Release) o).qualifier))
         {
-            if (build != o.build)
+            if (build != ((Release) o).build)
             {
-                return build < o.build ? -1 : 1;
+                return build < ((Release) o).build ? -1 : 1;
             }
         }
         
