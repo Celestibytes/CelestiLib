@@ -22,12 +22,14 @@ import java.util.Comparator;
  * @author PizzAna
  * @see Comparator
  */
-public class VersionComparator implements Comparator<Version>
+public final class VersionComparator implements Comparator<Version>
 {
+    public static final VersionComparator INSTANCE = new VersionComparator();
+    
     @Override
     public int compare(Version arg0, Version arg1)
     {
-        return 0;
+        return arg0.compareTo(arg1); // TODO Not final
     }
     
 }
