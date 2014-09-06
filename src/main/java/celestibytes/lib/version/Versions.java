@@ -25,19 +25,19 @@ import java.util.Comparator;
  * @see Release
  * @see Snapshot
  */
-public final class VersionComparator implements Comparator<Version>
+public final class Versions implements Comparator<Version>
 {
     /**
-     * The single instance of the {@link VersionComparator}.
+     * The single instance of the {@link Versions}.
      */
-    public static final VersionComparator INSTANCE = new VersionComparator();
+    public static final Versions INSTANCE = new Versions();
     
     /**
      * 
-     * Constructs a new {@link VersionComparator}.
+     * Constructs a new {@link Versions}.
      *
      */
-    private VersionComparator()
+    private Versions()
     {
         
     }
