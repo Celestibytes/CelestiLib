@@ -168,7 +168,7 @@ public class Release extends Version
      */
     public boolean isBeta()
     {
-        return qualifier.equalsIgnoreCase("beta");
+        return !isStable() && qualifier.equalsIgnoreCase("beta");
     }
 
     /**
@@ -179,7 +179,7 @@ public class Release extends Version
      */
     public boolean isAlpha()
     {
-        return qualifier.equalsIgnoreCase("alpha");
+        return !isStable() && qualifier.equalsIgnoreCase("alpha");
     }
 
     @Override
