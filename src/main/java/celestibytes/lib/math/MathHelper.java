@@ -28,7 +28,7 @@ public final class MathHelper
      * The instance of the {@link Random} class used in the {@link MathHelper}.
      */
     private static Random random = new Random();
-    
+
     /**
      * Clamps an {@code int} between the given minimum and maximum values.
      *
@@ -44,7 +44,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-    
+
     /**
      * Clamps an {@code double} between the given minimum and maximum values.
      *
@@ -60,7 +60,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-    
+
     /**
      * Clamps an {@code float} between the given minimum and maximum values.
      *
@@ -76,7 +76,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-    
+
     /**
      * Clamps an {@code int} between {@code 0} and the given maximum value.
      *
@@ -90,7 +90,7 @@ public final class MathHelper
     {
         return clampInt(value, 0, max);
     }
-    
+
     /**
      * Clamps an {@code double} between {@code 0.0D} and the given maximum
      * value.
@@ -105,7 +105,7 @@ public final class MathHelper
     {
         return clampDouble(value, 0.0D, max);
     }
-    
+
     /**
      * Clamps an {@code float} between {@code 0.0F} and the given maximum value.
      *
@@ -119,7 +119,7 @@ public final class MathHelper
     {
         return clampFloat(value, 0.0F, max);
     }
-    
+
     /**
      * Gives the next random {@code int} between {@code 0} and the given maximum
      * value.

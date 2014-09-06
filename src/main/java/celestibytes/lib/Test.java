@@ -12,12 +12,18 @@
  * details.
  */
 
-/**
- * This package contains version utility classes.
- *
- * @author PizzAna
- *
- */
+package celestibytes.lib;
 
-package celestibytes.lib.version;
+import celestibytes.lib.version.Version;
 
+public class Test
+{
+    public static void main(String[] args)
+    {
+        System.out.println(Version.parse("2.3.1").toString());
+        System.out.println(Version.parse("2.3-SNAPSHOT").toString());
+        System.out.println(Version.parse("2.3.1-beta.5").toString());
+        System.out.println(Version.parse("2.3.1-alpha").toString());
+    }
+
+}
