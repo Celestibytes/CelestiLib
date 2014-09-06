@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -31,24 +31,24 @@ public final class CalendarHelper
      */
     private CalendarHelper()
     {
-        
+
     }
-    
+
     /**
      * The current time.
      */
     private static Calendar curTime = Calendar.getInstance();
-    
+
     /**
      * The specific event's starting time.
      */
     private static Calendar eventStart = Calendar.getInstance();
-    
+
     /**
      * The specific event's ending time.
      */
     private static Calendar eventEnd = Calendar.getInstance();
-    
+
     /**
      * Tells if it's an author's birthday.
      *
@@ -59,7 +59,7 @@ public final class CalendarHelper
     {
         return isPizzAnaBirthday() || isOkkapelBirthday();
     }
-    
+
     /**
      * Tells if it's an PizzAna's birthday.
      *
@@ -70,12 +70,12 @@ public final class CalendarHelper
     {
         setDate(eventStart, Calendar.MAY, 3);
         setDate(eventEnd, Calendar.MAY, 5);
-        
+
         curTime = Calendar.getInstance();
-        
+
         return curTime.after(eventStart) && curTime.before(eventEnd);
     }
-    
+
     /**
      * Tells if it's an Okkapel's birthday.
      *
@@ -86,12 +86,12 @@ public final class CalendarHelper
     {
         setDate(eventStart, Calendar.JULY, 7);
         setDate(eventEnd, Calendar.JULY, 9);
-        
+
         curTime = Calendar.getInstance();
-        
+
         return curTime.after(eventStart) && curTime.before(eventEnd);
     }
-    
+
     /**
      * Tells if it's a Halloween.
      *
@@ -101,12 +101,12 @@ public final class CalendarHelper
     {
         setDate(eventStart, Calendar.OCTOBER, 30);
         setDate(eventEnd, Calendar.NOVEMBER, 2);
-        
+
         curTime = Calendar.getInstance();
-        
+
         return curTime.after(eventStart) && curTime.before(eventEnd);
     }
-    
+
     /**
      * Tells if it's a Christmas.
      *
@@ -116,12 +116,12 @@ public final class CalendarHelper
     {
         setDate(eventStart, Calendar.DECEMBER, 24);
         setDate(eventEnd, Calendar.DECEMBER, 27);
-        
+
         curTime = Calendar.getInstance();
-        
+
         return curTime.after(eventStart) && curTime.before(eventEnd);
     }
-    
+
     /**
      * Sets the given {@link Calendar}'s instance to a specific date.
      *
