@@ -21,15 +21,46 @@ import java.util.Comparator;
  * 
  * @author PizzAna
  * @see Comparator
+ * @see Version
+ * @see Release
+ * @see Snapshot
  */
 public final class VersionComparator implements Comparator<Version>
 {
+    /**
+     * The single instance of the {@link VersionComparator}.
+     */
     public static final VersionComparator INSTANCE = new VersionComparator();
     
+    /**
+     * 
+     * Constructs a new {@link VersionComparator}.
+     *
+     */
+    private VersionComparator()
+    {
+        
+    }
+    
+    /**
+     * Checks if two {@link Version}s are equal.
+     * @param arg0 the first {@link Version}.
+     * @param arg1 the second {@link Version}.
+     * @return {@code true} if the two {@link Version}s are equal, otherwise {@code false}.
+     */
+    public boolean equals(Version arg0, Version arg1)
+    {
+        return arg0.equals(arg1) && compare(arg0, arg1) == 0;
+    }
+    
+    /**
+     * Compares two {@link Version}s together.
+     * 
+     * @see Comparator#compare
+     */
     @Override
     public int compare(Version arg0, Version arg1)
     {
         return arg0.compareTo(arg1); // TODO Not final
     }
-    
 }
