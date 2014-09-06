@@ -190,14 +190,9 @@ public class Release extends Version<Release>
             throw new NullPointerException();
         }
         
-        if (major != o.major)
+        if (super.compareTo(o) != 0)
         {
-            return major < o.major ? -1 : 1;
-        }
-        
-        if (minor != o.minor)
-        {
-            return minor < o.minor ? -1 : 1;
+            return super.compareTo(o);
         }
         
         if (patch != o.patch)
@@ -208,11 +203,6 @@ public class Release extends Version<Release>
         if (isStable() && !o.isStable())
         {
             return 1;
-        }
-        
-        if (isSnapshot() && !o.isSnapshot())
-        {
-            return -1;
         }
         
         if (isAlpha() && o.isSnapshot())

@@ -14,6 +14,12 @@
 
 package celestibytes.lib.version;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * An {@link Object} that contains common version information.
  *
@@ -71,8 +77,8 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
      *             if the {@link String} does not contain a parsable
      *             {@link Version}.
      */
-    @SuppressWarnings({ "rawtypes", "unused" })
-    public static Version parse(String s) throws VersionFormatException
+    @SuppressWarnings("unused")
+    public static Version<?> parse(String s) throws VersionFormatException
     {
         String major = "";
         String minor = "";
@@ -160,6 +166,46 @@ public abstract class Version<V extends Version<V>> implements Comparable<V>
                 return new Release(major, minor, patch, qualifier, build);
             }
         }
+    }
+    
+    /**
+     * Parses a {@link Version} from the given {@link URL}.
+     * 
+     * @param url
+     *            the {@link URL}.
+     * @return the {@link Version} represented by the {@link URL}.
+     * @throws MalformedURLException
+     *             if the {@link URL} is invalid.
+     * @throws IOException
+     *             if the {@link URL} cannot be read.
+     * @throws VersionFormatException
+     *             if the {@link URL} does not contain a parsable
+     *             {@link Version}.
+     */
+    public static Version<?> parseFromUrl(URL url) throws VersionFormatException, MalformedURLException, IOException
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        Version<?> ret = parse(reader.readLine());
+        reader.close();
+        return ret;
+    }
+    
+    /**
+     * Parses a {@link Version} from the given url.
+     * 
+     * @param s
+     *            the url.
+     * @return the {@link Version} represented by the url.
+     * @throws MalformedURLException
+     *             if the url is invalid.
+     * @throws IOException
+     *             if the url cannot be read.
+     * @throws VersionFormatException
+     *             if the url does not contain a parsable {@link Version}.
+     */
+    public static Version<?> parseFromUrl(String s) throws VersionFormatException, MalformedURLException, IOException
+    {
+        return parseFromUrl(new URL(s));
     }
     
     /**
