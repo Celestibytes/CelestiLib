@@ -17,22 +17,49 @@ package celestibytes.lib.version;
 import java.util.Comparator;
 
 /**
- * An {@link Comparator} that is used to "efficiently" compare two
- * {@link Version}s.
+ * An {@link Object} that contains {@link Version}-related utility methods.
  *
  * @author PizzAna
- * @see Comparator
  * @see Version
  * @see Release
  * @see Snapshot
  */
-public final class Versions implements Comparator<Version>
+public final class Versions
 {
     /**
-     * The single instance of the {@link Versions}.
+     * The {@link Version}'s alpha qualifier.
      */
-    public static final Versions INSTANCE = new Versions();
-
+    public static final String ALPHA = "alpha";
+    
+    /**
+     * The {@link Version}'s beta qualifier.
+     */
+    public static final String BETA = "beta";
+    
+    /**
+     * The {@link Version}'s snapshot qualifier.
+     */
+    public static final String SNAPSHOT = "SNAPSHOT";
+    
+    /**
+     * An {@link Comparator} that is used to compare two {@link Version}s.
+     * 
+     * @see Comparator
+     */
+    public static Comparator<Version> comparator = new Comparator<Version>()
+    {
+        /**
+         * Compares two {@link Version}s together.
+         *
+         * @see Comparator#compare
+         */
+        @Override
+        public int compare(Version arg0, Version arg1)
+        {
+            return arg0.compareTo(arg1); // TODO Not final
+        }
+    };
+    
     /**
      *
      * Constructs a new {@link Versions}.
@@ -40,9 +67,9 @@ public final class Versions implements Comparator<Version>
      */
     private Versions()
     {
-
+        
     }
-
+    
     /**
      * Checks if two {@link Version}s are equal.
      * 
@@ -53,19 +80,20 @@ public final class Versions implements Comparator<Version>
      * @return {@code true} if the two {@link Version}s are equal, otherwise
      *         {@code false}.
      */
-    public boolean equals(Version arg0, Version arg1)
+    public static boolean equals(Version arg0, Version arg1)
     {
-        return arg0.equals(arg1) && compare(arg0, arg1) == 0;
+        return (arg0.equals(arg1) && comparator.compare(arg0, arg1) == 0) || arg0 == null && arg1 == null;
     }
-
+    
     /**
-     * Compares two {@link Version}s together.
-     *
-     * @see Comparator#compare
+     * Returns a {@link String} that represents the given {@link Version}.
+     * 
+     * @param version
+     *            the {@link Version}.
+     * @return the {@link String} representing the {@link Version}.
      */
-    @Override
-    public int compare(Version arg0, Version arg1)
+    public static String toString(Version version)
     {
-        return arg0.compareTo(arg1); // TODO Not final
+        return version == null ? "" : version.toString();
     }
 }

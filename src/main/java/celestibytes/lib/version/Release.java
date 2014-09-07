@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -26,17 +26,17 @@ public class Release extends Version
      * The patch version number.
      */
     public final int patch;
-
+    
     /**
      * The version qualifier.
      */
     public final String qualifier;
-
+    
     /**
      * The version's build.
      */
     public final int build;
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -52,7 +52,7 @@ public class Release extends Version
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch));
     }
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -68,7 +68,7 @@ public class Release extends Version
     {
         this(major, minor, patch, null, 0);
     }
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -86,7 +86,7 @@ public class Release extends Version
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), qualifier);
     }
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -104,7 +104,7 @@ public class Release extends Version
     {
         this(major, minor, patch, qualifier, 0);
     }
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -125,7 +125,7 @@ public class Release extends Version
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), qualifier, Integer
                 .parseInt(build));
     }
-
+    
     /**
      *
      * Constructs a new {@link Release}.
@@ -148,7 +148,7 @@ public class Release extends Version
         this.qualifier = qualifier;
         this.build = build;
     }
-
+    
     /**
      * Tells if the {@link Release} is stable according to the data.
      *
@@ -159,7 +159,7 @@ public class Release extends Version
     {
         return qualifier == null;
     }
-
+    
     /**
      * Tells if the {@link Release} is beta according to the data.
      *
@@ -168,9 +168,9 @@ public class Release extends Version
      */
     public boolean isBeta()
     {
-        return !isStable() && qualifier.equalsIgnoreCase("beta");
+        return !isStable() && qualifier.equalsIgnoreCase(Versions.BETA);
     }
-
+    
     /**
      * Tells if the {@link Release} is alpha according to the data.
      *
@@ -179,9 +179,9 @@ public class Release extends Version
      */
     public boolean isAlpha()
     {
-        return !isStable() && qualifier.equalsIgnoreCase("alpha");
+        return !isStable() && qualifier.equalsIgnoreCase(Versions.ALPHA);
     }
-
+    
     @Override
     public int compareTo(Version o)
     {
@@ -189,42 +189,47 @@ public class Release extends Version
         {
             throw new NullPointerException();
         }
-
+        
         if (super.compareTo(o) != 0)
         {
             return super.compareTo(o);
         }
-
+        
         if (patch != ((Release) o).patch)
         {
             return patch < ((Release) o).patch ? -1 : 1;
         }
-
+        
         if (isStable() && !((Release) o).isStable())
         {
             return 1;
         }
-
+        
         if (isAlpha() && !((Release) o).isAlpha())
         {
             return -1;
         }
-
+        
         if (isBeta() && ((Release) o).isAlpha())
         {
             return 1;
         }
-
+        
         if (isBeta() && !((Release) o).isBeta())
         {
             return -1;
         }
-
+        
         if (!isStable() && ((Release) o).isStable())
         {
             return -1;
         }
-
+        
+        if (qualifier == null && ((Release) o).qualifier != null)
+        {
+            return 1;
+        }
+        
         if (qualifier.equals(((Release) o).qualifier))
         {
             if (build != ((Release) o).build)
@@ -232,10 +237,10 @@ public class Release extends Version
                 return build < ((Release) o).build ? -1 : 1;
             }
         }
-
+        
         return 0;
     }
-
+    
     @Override
     public int hashCode()
     {
@@ -246,7 +251,7 @@ public class Release extends Version
         result = prime * result + (qualifier == null ? 0 : qualifier.hashCode());
         return result;
     }
-
+    
     @Override
     public boolean equals(Object obj)
     {
@@ -254,29 +259,29 @@ public class Release extends Version
         {
             return true;
         }
-
+        
         if (!super.equals(obj))
         {
             return false;
         }
-
+        
         if (!(obj instanceof Release))
         {
             return false;
         }
-
+        
         Release other = (Release) obj;
-
+        
         if (build != other.build)
         {
             return false;
         }
-
+        
         if (patch != other.patch)
         {
             return false;
         }
-
+        
         if (qualifier == null)
         {
             if (other.qualifier != null)
@@ -288,10 +293,10 @@ public class Release extends Version
         {
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public String toString()
     {

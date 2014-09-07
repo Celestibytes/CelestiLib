@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -32,12 +32,12 @@ public abstract class Version implements Comparable<Version>
      * The major version number.
      */
     public final int major;
-
+    
     /**
      * The minor version number.
      */
     public final int minor;
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -51,7 +51,7 @@ public abstract class Version implements Comparable<Version>
     {
         this(Integer.parseInt(major), Integer.parseInt(minor));
     }
-
+    
     /**
      *
      * Constructs a new {@link Version}.
@@ -66,7 +66,7 @@ public abstract class Version implements Comparable<Version>
         this.major = major;
         this.minor = minor;
     }
-
+    
     /**
      * Parses a {@link Version} from the given {@link String}.
      *
@@ -84,70 +84,70 @@ public abstract class Version implements Comparable<Version>
         String minor = "";
         int dots = 0;
         boolean hyphen = false;
-
+        
         String patch = "";
         String qualifier = "";
         String build = "";
-
+        
         label:
-            for (Character c : s.toCharArray())
+        for (Character c : s.toCharArray())
+        {
+            if (c.equals('.'))
             {
-                if (c.equals('.'))
+                dots = dots + 1;
+            }
+            else if (c.equals('-'))
+            {
+                hyphen = true;
+            }
+            else
+            {
+                switch (dots)
                 {
-                    dots = dots + 1;
-                }
-                else if (c.equals('-'))
-                {
-                    hyphen = true;
-                }
-                else
-                {
-                    switch (dots)
+                    case 0:
                     {
-                        case 0:
+                        major = major + c.charValue();
+                        break;
+                    }
+                    case 1:
+                    {
+                        if (hyphen)
                         {
-                            major = major + c.charValue();
-                            break;
+                            qualifier = qualifier + c.toString();
                         }
-                        case 1:
+                        else
                         {
-                            if (hyphen)
-                            {
-                                qualifier = qualifier + c.toString();
-                            }
-                            else
-                            {
-                                minor = minor + c.toString();
-                            }
-                            break;
+                            minor = minor + c.toString();
                         }
-                        case 2:
+                        break;
+                    }
+                    case 2:
+                    {
+                        if (hyphen)
                         {
-                            if (hyphen)
-                            {
-                                qualifier = qualifier + c.toString();
-                            }
-                            else
-                            {
-                                patch = patch + c.toString();
-                            }
-                            break;
+                            qualifier = qualifier + c.toString();
                         }
-                        case 3:
+                        else
                         {
-                            build = build + c.toString();
-                            break;
+                            patch = patch + c.toString();
                         }
+                        break;
+                    }
+                    case 3:
+                    {
+                        build = build + c.toString();
+                        break;
                     }
                 }
             }
-
+        }
+        
         if (major.equals("") || minor.equals(""))
         {
             throw new VersionFormatException("Major or minor may not be null");
         }
-
-        if (qualifier.equalsIgnoreCase(Snapshot.SNAPSHOT))
+        
+        if (qualifier.equalsIgnoreCase(Versions.SNAPSHOT))
         {
             return new Snapshot(major, minor);
         }
@@ -167,7 +167,7 @@ public abstract class Version implements Comparable<Version>
             }
         }
     }
-
+    
     /**
      * Parses a {@link Version} from the given {@link URL}.
      *
@@ -189,7 +189,7 @@ public abstract class Version implements Comparable<Version>
         reader.close();
         return ret;
     }
-
+    
     /**
      * Parses a {@link Version} from the given url.
      *
@@ -207,7 +207,7 @@ public abstract class Version implements Comparable<Version>
     {
         return parseFromUrl(new URL(s));
     }
-
+    
     /**
      * Tells if the {@link Version} is a release according to the data.
      *
@@ -218,7 +218,7 @@ public abstract class Version implements Comparable<Version>
     {
         return this instanceof Release;
     }
-
+    
     /**
      * Tells if the {@link Version} is a snapshot according to the data.
      *
@@ -229,7 +229,7 @@ public abstract class Version implements Comparable<Version>
     {
         return this instanceof Snapshot;
     }
-
+    
     @Override
     public int compareTo(Version o)
     {
@@ -237,30 +237,30 @@ public abstract class Version implements Comparable<Version>
         {
             throw new NullPointerException();
         }
-
+        
         if (major != o.major)
         {
             return major < o.major ? -1 : 1;
         }
-
+        
         if (minor != o.minor)
         {
             return minor < o.minor ? -1 : 1;
         }
-
+        
         if (isSnapshot() && !o.isSnapshot())
         {
             return -1;
         }
-
+        
         if (isRelease() && !o.isRelease())
         {
             return -1;
         }
-
+        
         return 0;
     }
-
+    
     @Override
     public int hashCode()
     {
@@ -270,7 +270,7 @@ public abstract class Version implements Comparable<Version>
         result = prime * result + minor;
         return result;
     }
-
+    
     @Override
     public boolean equals(Object obj)
     {
@@ -278,32 +278,32 @@ public abstract class Version implements Comparable<Version>
         {
             return true;
         }
-
+        
         if (obj == null)
         {
             return false;
         }
-
+        
         if (!(obj instanceof Version))
         {
             return false;
         }
-
+        
         Version other = (Version) obj;
-
+        
         if (major != other.major)
         {
             return false;
         }
-
+        
         if (minor != other.minor)
         {
             return false;
         }
-
+        
         return true;
     }
-
+    
     @Override
     public String toString()
     {
