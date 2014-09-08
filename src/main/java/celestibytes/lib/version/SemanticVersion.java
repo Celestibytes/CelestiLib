@@ -155,6 +155,17 @@ public class SemanticVersion extends Version implements Release
     }
     
     /**
+     * Tells if the {@link Release} is stable according to the data.
+     *
+     * @return {@code true} if the {@link Release} represents a stable release,
+     *         otherwise {@code false}.
+     */
+    public boolean isStable()
+    {
+        return qualifier == null;
+    }
+    
+    /**
      * Tells if the {@link SemanticVersion} is beta according to the data.
      *
      * @return {@code true} if the {@link SemanticVersion} represents a beta
@@ -185,18 +196,6 @@ public class SemanticVersion extends Version implements Release
     public int getPatch()
     {
         return patch;
-    }
-    
-    /**
-     * Tells if the {@link Release} is stable according to the data.
-     *
-     * @return {@code true} if the {@link Release} represents a stable release,
-     *         otherwise {@code false}.
-     */
-    @Override
-    public boolean isStable()
-    {
-        return qualifier == null;
     }
     
     @Override

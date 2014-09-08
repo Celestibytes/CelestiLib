@@ -118,18 +118,6 @@ public class BigVersion extends Version implements Release
         return patch;
     }
     
-    /**
-     * Tells if the {@link Release} is stable according to the data.
-     *
-     * @return {@code true} if the {@link Release} represents a stable release,
-     *         otherwise {@code false}.
-     */
-    @Override
-    public boolean isStable()
-    {
-        return build == 0;
-    }
-    
     @Override
     public int compareTo(Version o)
     {
@@ -151,16 +139,6 @@ public class BigVersion extends Version implements Release
         if (patch != ((BigVersion) o).patch)
         {
             return patch < ((BigVersion) o).patch ? -1 : 1;
-        }
-        
-        if (isStable() && !((BigVersion) o).isStable())
-        {
-            return 1;
-        }
-        
-        if (!isStable() && ((BigVersion) o).isStable())
-        {
-            return -1;
         }
         
         if (build != ((BigVersion) o).build)

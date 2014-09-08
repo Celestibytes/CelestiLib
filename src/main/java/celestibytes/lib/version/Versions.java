@@ -55,7 +55,7 @@ public final class Versions
      * 
      * @see Comparator
      */
-    public static Comparator<Version> comparator = new Comparator<Version>()
+    public static final Comparator<Version> comparator = new Comparator<Version>()
     {
         /**
          * Compares two {@link Version}s together.
@@ -107,23 +107,12 @@ public final class Versions
                         return b1.getPatch() < b2.getPatch() ? -1 : 1;
                     }
                     
-                    if (b1.isStable() && !b2.isStable())
-                    {
-                        return 1;
-                    }
-                    
                     if (b1.build != b2.build)
                     {
                         return b1.build < b2.build ? -1 : 1;
                     }
-                    
-                    if (!b1.isStable() && b2.isStable())
-                    {
-                        return -1;
-                    }
                 }
-                
-                if (o1 instanceof SemanticVersion && o2 instanceof SemanticVersion)
+                else if (o1 instanceof SemanticVersion && o2 instanceof SemanticVersion)
                 {
                     SemanticVersion s1 = (SemanticVersion) o1;
                     SemanticVersion s2 = (SemanticVersion) o2;
@@ -171,8 +160,7 @@ public final class Versions
                         }
                     }
                 }
-                
-                if (o1 instanceof BigVersion && o2 instanceof SemanticVersion)
+                else if (o1 instanceof BigVersion && o2 instanceof SemanticVersion)
                 {
                     BigVersion b = (BigVersion) o1;
                     SemanticVersion s = (SemanticVersion) o2;
@@ -180,11 +168,6 @@ public final class Versions
                     if (b.patch != s.patch)
                     {
                         return b.patch < s.patch ? -1 : 1;
-                    }
-                    
-                    if (b.isStable() && !s.isStable())
-                    {
-                        return 1;
                     }
                     
                     if (s.qualifier != null)
@@ -197,8 +180,7 @@ public final class Versions
                         return 1;
                     }
                 }
-                
-                if (o1 instanceof SemanticVersion && o2 instanceof BigVersion)
+                else if (o1 instanceof SemanticVersion && o2 instanceof BigVersion)
                 {
                     SemanticVersion s = (SemanticVersion) o1;
                     BigVersion b = (BigVersion) o2;
@@ -206,11 +188,6 @@ public final class Versions
                     if (s.patch != b.patch)
                     {
                         return s.patch < b.patch ? -1 : 1;
-                    }
-                    
-                    if (s.isStable() && !b.isStable())
-                    {
-                        return 1;
                     }
                     
                     if (s.qualifier != null)

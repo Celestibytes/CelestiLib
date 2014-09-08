@@ -14,6 +14,8 @@
 
 package celestibytes.lib;
 
+import celestibytes.lib.version.BigVersion;
+import celestibytes.lib.version.SemanticVersion;
 import celestibytes.lib.version.Versions;
 
 public class Test
@@ -36,9 +38,22 @@ public class Test
             System.out.println("Swag");
         }
         
-        if (Versions.comparator.compare(Versions.parseVersion("1.2.3.4"), Versions.parseVersion("1.2.4")) > 0)
+        BigVersion b = (BigVersion) Versions.parseVersion("2.2.3.4");
+        SemanticVersion s = (SemanticVersion) Versions.parseVersion("2.2.4");
+        
+        if (Versions.comparator.compare(s, b) > 0)
         {
             System.out.println("Yolo");
+        }
+        
+        if (Versions.parseVersion("1.2.3.4") instanceof BigVersion)
+        {
+            System.out.println("Pöö");
+        }
+        
+        if (Versions.parseVersion("1.2.3") instanceof SemanticVersion)
+        {
+            System.out.println("Höö");
         }
     }
 

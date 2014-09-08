@@ -33,12 +33,4 @@ public interface Release
      * @return the patch version number.
      */
     public int getPatch();
-    
-    /**
-     * Tells if the {@link Release} is stable according to the data.
-     *
-     * @return {@code true} if the {@link Release} represents a stable release,
-     *         otherwise {@code false}.
-     */
-    public boolean isStable();
 }
