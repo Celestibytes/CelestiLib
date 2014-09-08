@@ -14,16 +14,32 @@
 
 package celestibytes.lib;
 
-import celestibytes.lib.version.Version;
+import celestibytes.lib.version.Versions;
 
 public class Test
 {
     public static void main(String[] args)
     {
-        System.out.println(Version.parse("2.3.1").toString());
-        System.out.println(Version.parse("2.3-SNAPSHOT").toString());
-        System.out.println(Version.parse("2.3.1-beta.5").toString());
-        System.out.println(Version.parse("2.3.1-alpha").toString());
+        System.out.println(Versions.parseVersion("2.3.1").toString());
+        System.out.println(Versions.parseVersion("2.3-SNAPSHOT").toString());
+        System.out.println(Versions.parseVersion("2.3.1-beta.5").toString());
+        System.out.println(Versions.parseVersion("2.3.1-alpha").toString());
+        System.out.println(Versions.parseVersion("2.3.1.5").toString());
+        
+        if (Versions.comparator.compare(Versions.parseVersion("2.3.1.5"), Versions.parseVersion("2.3.1-alpha")) > 0)
+        {
+            System.out.println("Hello World!");
+        }
+        
+        if (Versions.comparator.compare(Versions.parseVersion("1.2.4"), Versions.parseVersion("1.2.3.4")) > 0)
+        {
+            System.out.println("Swag");
+        }
+        
+        if (Versions.comparator.compare(Versions.parseVersion("1.2.3.4"), Versions.parseVersion("1.2.4")) > 0)
+        {
+            System.out.println("Yolo");
+        }
     }
 
 }

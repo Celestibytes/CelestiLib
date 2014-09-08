@@ -96,28 +96,30 @@ public final class Versions
             }
             
             if (o1.isRelease() && o2.isRelease())
-            {
-                Release r1 = (Release) o1;
-                Release r2 = (Release) o2;
-                
-                if (r1.getPatch() != r2.getPatch())
-                {
-                    return r1.getPatch() < r2.getPatch() ? -1 : 1;
-                }
-                
-                if (r1.isStable() && !r2.isStable())
-                {
-                    return 1;
-                }
-                
+            {                
                 if (o1 instanceof BigVersion && o2 instanceof BigVersion)
                 {
                     BigVersion b1 = (BigVersion) o1;
                     BigVersion b2 = (BigVersion) o2;
                     
+                    if (b1.getPatch() != b2.getPatch())
+                    {
+                        return b1.getPatch() < b2.getPatch() ? -1 : 1;
+                    }
+                    
+                    if (b1.isStable() && !b2.isStable())
+                    {
+                        return 1;
+                    }
+                    
                     if (b1.build != b2.build)
                     {
                         return b1.build < b2.build ? -1 : 1;
+                    }
+                    
+                    if (!b1.isStable() && b2.isStable())
+                    {
+                        return -1;
                     }
                 }
                 
@@ -125,6 +127,16 @@ public final class Versions
                 {
                     SemanticVersion s1 = (SemanticVersion) o1;
                     SemanticVersion s2 = (SemanticVersion) o2;
+                    
+                    if (s1.getPatch() != s2.getPatch())
+                    {
+                        return s1.getPatch() < s2.getPatch() ? -1 : 1;
+                    }
+                    
+                    if (s1.isStable() && !s2.isStable())
+                    {
+                        return 1;
+                    }
                     
                     if (s1.isAlpha() && !s2.isAlpha())
                     {
@@ -137,6 +149,11 @@ public final class Versions
                     }
                     
                     if (s1.isBeta() && !s2.isBeta())
+                    {
+                        return -1;
+                    }
+                    
+                    if (!s1.isStable() && s2.isStable())
                     {
                         return -1;
                     }
@@ -157,9 +174,25 @@ public final class Versions
                 
                 if (o1 instanceof BigVersion && o2 instanceof SemanticVersion)
                 {
+                    BigVersion b = (BigVersion) o1;
                     SemanticVersion s = (SemanticVersion) o2;
                     
+                    if (b.patch != s.patch)
+                    {
+                        return b.patch < s.patch ? -1 : 1;
+                    }
+                    
+                    if (b.isStable() && !s.isStable())
+                    {
+                        return 1;
+                    }
+                    
                     if (s.qualifier != null)
+                    {
+                        return 1;
+                    }
+                    
+                    if (b.build > 0)
                     {
                         return 1;
                     }
@@ -168,16 +201,27 @@ public final class Versions
                 if (o1 instanceof SemanticVersion && o2 instanceof BigVersion)
                 {
                     SemanticVersion s = (SemanticVersion) o1;
+                    BigVersion b = (BigVersion) o2;
+                    
+                    if (s.patch != b.patch)
+                    {
+                        return s.patch < b.patch ? -1 : 1;
+                    }
+                    
+                    if (s.isStable() && !b.isStable())
+                    {
+                        return 1;
+                    }
                     
                     if (s.qualifier != null)
                     {
                         return -1;
                     }
-                }
-                
-                if (!r1.isStable() && r2.isStable())
-                {
-                    return -1;
+                    
+                    if (b.build > 0)
+                    {
+                        return -1;
+                    }
                 }
             }
             
@@ -279,7 +323,14 @@ public final class Versions
         }
         else if (qualifier.equalsIgnoreCase(""))
         {
-            return new SemanticVersion(major, minor, patch);
+            if (build.equalsIgnoreCase(""))
+            {
+                return new SemanticVersion(major, minor, patch);
+            }
+            else
+            {
+                return new BigVersion(major, minor, patch, build);
+            }
         }
         else
         {
