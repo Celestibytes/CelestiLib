@@ -21,8 +21,9 @@ package celestibytes.lib.version;
  * 
  * @see Versions
  * @see Version
+ * @see Release
  */
-public class BigRelease extends Version
+public class BigRelease extends Version implements Release
 {
     /**
      * The patch version number.

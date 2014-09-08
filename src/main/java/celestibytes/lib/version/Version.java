@@ -157,17 +157,17 @@ public abstract class Version implements Comparable<Version>
         }
         else if (qualifier.equalsIgnoreCase(""))
         {
-            return new Release(major, minor, patch);
+            return new SemanticRelease(major, minor, patch);
         }
         else
         {
             if (build.equalsIgnoreCase(""))
             {
-                return new Release(major, minor, patch, qualifier);
+                return new SemanticRelease(major, minor, patch, qualifier);
             }
             else
             {
-                return new Release(major, minor, patch, qualifier, build);
+                return new SemanticRelease(major, minor, patch, qualifier, build);
             }
         }
     }
@@ -220,7 +220,7 @@ public abstract class Version implements Comparable<Version>
      */
     public boolean isRelease()
     {
-        return this instanceof Release || this instanceof BigRelease;
+        return this instanceof Release;
     }
     
     /**

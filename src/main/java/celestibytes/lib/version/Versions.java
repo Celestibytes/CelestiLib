@@ -20,13 +20,13 @@ import java.util.Comparator;
  * An {@link Object} that contains {@link Version}-related utility methods.
  * <p/>
  * You should always use the methods in this class instead of methods in
- * {@link Version} or it's subtypes ({@link BigRelease}, {@link Release},
+ * {@link Version} or it's subtypes ({@link BigRelease}, {@link SemanticRelease},
  * {@link Snapshot}).
  *
  * @author PizzAna
  * @see Version
  * @see BigRelease
- * @see Release
+ * @see SemanticRelease
  * @see Snapshot
  */
 public final class Versions
@@ -56,12 +56,47 @@ public final class Versions
         /**
          * Compares two {@link Version}s together.
          *
-         * @see Comparator#compare
+         * @see Comparator#compare(Object, Object)
          */
         @Override
-        public int compare(Version arg0, Version arg1)
+        public int compare(Version o1, Version o2)
         {
-            return arg0.compareTo(arg1); // TODO Not final
+            if (o1 == null && o2 != null)
+            {
+                return -1;
+            }
+            
+            if (o1 != null && o2 == null)
+            {
+                return 1;
+            }
+            
+            if (o1.major != o2.major)
+            {
+                return o1.major < o2.major ? -1 : 1;
+            }
+            
+            if (o1.minor != o2.minor)
+            {
+                return o1.minor < o2.minor ? -1 : 1;
+            }
+            
+            if (o1.isSnapshot() && !o2.isSnapshot())
+            {
+                return -1;
+            }
+            
+            if (o1.isRelease() && !o2.isRelease())
+            {
+                return 1;
+            }
+            
+            if (true)
+            {
+                // TODO Remove. This is here to prevent annoying errors.
+            }
+            
+            return 0;
         }
     };
     
