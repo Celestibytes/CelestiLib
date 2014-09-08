@@ -16,6 +16,8 @@ package celestibytes.lib.version;
 
 /**
  * A {@link Version} that supports "x.y.z.build" format.
+ * <p/>
+ * A {@link BigVersion} is always treated as a higher level version than a {@link SemanticVersion} with qualifier.
  * 
  * @author PizzAna
  * 
@@ -23,7 +25,7 @@ package celestibytes.lib.version;
  * @see Version
  * @see Release
  */
-public class BigRelease extends Version implements Release
+public class BigVersion extends Version implements Release
 {
     /**
      * The patch version number.
@@ -37,7 +39,7 @@ public class BigRelease extends Version implements Release
     
     /**
      *
-     * Constructs a new {@link BigRelease}.
+     * Constructs a new {@link BigVersion}.
      *
      * @param major
      *            the major version number.
@@ -46,14 +48,14 @@ public class BigRelease extends Version implements Release
      * @param patch
      *            the patch version number.
      */
-    public BigRelease(String major, String minor, String patch)
+    public BigVersion(String major, String minor, String patch)
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch));
     }
     
     /**
      *
-     * Constructs a new {@link BigRelease}.
+     * Constructs a new {@link BigVersion}.
      *
      * @param major
      *            the major version number.
@@ -62,14 +64,14 @@ public class BigRelease extends Version implements Release
      * @param patch
      *            the patch version number.
      */
-    public BigRelease(int major, int minor, int patch)
+    public BigVersion(int major, int minor, int patch)
     {
         this(major, minor, patch, 0);
     }
     
     /**
      *
-     * Constructs a new {@link BigRelease}.
+     * Constructs a new {@link BigVersion}.
      *
      * @param major
      *            the major version number.
@@ -80,14 +82,14 @@ public class BigRelease extends Version implements Release
      * @param build
      *            the version build number.
      */
-    public BigRelease(String major, String minor, String patch, String build)
+    public BigVersion(String major, String minor, String patch, String build)
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), Integer.parseInt(build));
     }
     
     /**
      *
-     * Constructs a new {@link BigRelease}.
+     * Constructs a new {@link BigVersion}.
      *
      * @param major
      *            the major version number.
@@ -98,7 +100,7 @@ public class BigRelease extends Version implements Release
      * @param build
      *            the version build number.
      */
-    public BigRelease(int major, int minor, int patch, int build)
+    public BigVersion(int major, int minor, int patch, int build)
     {
         super(major, minor);
         this.patch = patch;
@@ -106,11 +108,23 @@ public class BigRelease extends Version implements Release
     }
     
     /**
-     * Tells if the {@link BigRelease} is stable according to the data.
-     *
-     * @return {@code true} if the {@link BigRelease} represents a stable
-     *         release, otherwise {@code false}.
+     * Gives the patch version number of this {@link Release}.
+     * 
+     * @return the patch version number.
      */
+    @Override
+    public int getPatch()
+    {
+        return patch;
+    }
+    
+    /**
+     * Tells if the {@link Release} is stable according to the data.
+     *
+     * @return {@code true} if the {@link Release} represents a stable release,
+     *         otherwise {@code false}.
+     */
+    @Override
     public boolean isStable()
     {
         return build == 0;
@@ -129,29 +143,29 @@ public class BigRelease extends Version implements Release
             return super.compareTo(o);
         }
         
-        if (!(o instanceof BigRelease))
+        if (!(o instanceof BigVersion))
         {
             // TODO Is this necessary?
         }
         
-        if (patch != ((BigRelease) o).patch)
+        if (patch != ((BigVersion) o).patch)
         {
-            return patch < ((BigRelease) o).patch ? -1 : 1;
+            return patch < ((BigVersion) o).patch ? -1 : 1;
         }
         
-        if (isStable() && !((BigRelease) o).isStable())
+        if (isStable() && !((BigVersion) o).isStable())
         {
             return 1;
         }
         
-        if (!isStable() && ((BigRelease) o).isStable())
+        if (!isStable() && ((BigVersion) o).isStable())
         {
             return -1;
         }
         
-        if (build != ((BigRelease) o).build)
+        if (build != ((BigVersion) o).build)
         {
-            return build < ((BigRelease) o).build ? -1 : 1;
+            return build < ((BigVersion) o).build ? -1 : 1;
         }
         
         return 0;
@@ -180,12 +194,12 @@ public class BigRelease extends Version implements Release
             return false;
         }
         
-        if (!(obj instanceof BigRelease))
+        if (!(obj instanceof BigVersion))
         {
             return false;
         }
         
-        BigRelease other = (BigRelease) obj;
+        BigVersion other = (BigVersion) obj;
         
         if (build != other.build)
         {

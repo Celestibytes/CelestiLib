@@ -16,6 +16,8 @@ package celestibytes.lib.version;
 
 /**
  * A {@link Version} that supports "x.y.z(-qualifier(.build))" format.
+ * <p/>
+ * A {@link SemanticVersion} with a qualifier is treated as lower level version that a {@link BigVersion}.
  *
  * @author PizzAna
  * 
@@ -23,7 +25,7 @@ package celestibytes.lib.version;
  * @see Version
  * @see Release
  */
-public class SemanticRelease extends Version implements Release
+public class SemanticVersion extends Version implements Release
 {
     /**
      * The patch version number.
@@ -42,7 +44,7 @@ public class SemanticRelease extends Version implements Release
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -51,14 +53,14 @@ public class SemanticRelease extends Version implements Release
      * @param patch
      *            the patch version number.
      */
-    public SemanticRelease(String major, String minor, String patch)
+    public SemanticVersion(String major, String minor, String patch)
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch));
     }
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -67,14 +69,14 @@ public class SemanticRelease extends Version implements Release
      * @param patch
      *            the patch version number.
      */
-    public SemanticRelease(int major, int minor, int patch)
+    public SemanticVersion(int major, int minor, int patch)
     {
         this(major, minor, patch, null, 0);
     }
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -85,14 +87,14 @@ public class SemanticRelease extends Version implements Release
      * @param qualifier
      *            the version qualifier.
      */
-    public SemanticRelease(String major, String minor, String patch, String qualifier)
+    public SemanticVersion(String major, String minor, String patch, String qualifier)
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), qualifier);
     }
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -103,14 +105,14 @@ public class SemanticRelease extends Version implements Release
      * @param qualifier
      *            the version qualifier.
      */
-    public SemanticRelease(int major, int minor, int patch, String qualifier)
+    public SemanticVersion(int major, int minor, int patch, String qualifier)
     {
         this(major, minor, patch, qualifier, 0);
     }
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -123,7 +125,7 @@ public class SemanticRelease extends Version implements Release
      * @param build
      *            the version's build.
      */
-    public SemanticRelease(String major, String minor, String patch, String qualifier, String build)
+    public SemanticVersion(String major, String minor, String patch, String qualifier, String build)
     {
         this(Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch), qualifier, Integer
                 .parseInt(build));
@@ -131,7 +133,7 @@ public class SemanticRelease extends Version implements Release
     
     /**
      *
-     * Constructs a new {@link SemanticRelease}.
+     * Constructs a new {@link SemanticVersion}.
      *
      * @param major
      *            the major version number.
@@ -144,7 +146,7 @@ public class SemanticRelease extends Version implements Release
      * @param build
      *            the version's build.
      */
-    public SemanticRelease(int major, int minor, int patch, String qualifier, int build)
+    public SemanticVersion(int major, int minor, int patch, String qualifier, int build)
     {
         super(major, minor);
         this.patch = patch;
@@ -153,21 +155,10 @@ public class SemanticRelease extends Version implements Release
     }
     
     /**
-     * Tells if the {@link SemanticRelease} is stable according to the data.
+     * Tells if the {@link SemanticVersion} is beta according to the data.
      *
-     * @return {@code true} if the {@link SemanticRelease} represents a stable release,
-     *         otherwise {@code false}.
-     */
-    public boolean isStable()
-    {
-        return qualifier == null;
-    }
-    
-    /**
-     * Tells if the {@link SemanticRelease} is beta according to the data.
-     *
-     * @return {@code true} if the {@link SemanticRelease} represents a beta release,
-     *         otherwise {@code false}.
+     * @return {@code true} if the {@link SemanticVersion} represents a beta
+     *         release, otherwise {@code false}.
      */
     public boolean isBeta()
     {
@@ -175,14 +166,37 @@ public class SemanticRelease extends Version implements Release
     }
     
     /**
-     * Tells if the {@link SemanticRelease} is alpha according to the data.
+     * Tells if the {@link SemanticVersion} is alpha according to the data.
      *
-     * @return {@code true} if the {@link SemanticRelease} represents a alpha release,
-     *         otherwise {@code false}.
+     * @return {@code true} if the {@link SemanticVersion} represents a alpha
+     *         release, otherwise {@code false}.
      */
     public boolean isAlpha()
     {
         return !isStable() && qualifier.equalsIgnoreCase(Versions.ALPHA);
+    }
+    
+    /**
+     * Gives the patch version number of this {@link Release}.
+     * 
+     * @return the patch version number.
+     */
+    @Override
+    public int getPatch()
+    {
+        return patch;
+    }
+    
+    /**
+     * Tells if the {@link Release} is stable according to the data.
+     *
+     * @return {@code true} if the {@link Release} represents a stable release,
+     *         otherwise {@code false}.
+     */
+    @Override
+    public boolean isStable()
+    {
+        return qualifier == null;
     }
     
     @Override
@@ -198,51 +212,51 @@ public class SemanticRelease extends Version implements Release
             return super.compareTo(o);
         }
         
-        if (!(o instanceof SemanticRelease))
+        if (!(o instanceof SemanticVersion))
         {
             // TODO Is this necessary?
         }
         
-        if (patch != ((SemanticRelease) o).patch)
+        if (patch != ((SemanticVersion) o).patch)
         {
-            return patch < ((SemanticRelease) o).patch ? -1 : 1;
+            return patch < ((SemanticVersion) o).patch ? -1 : 1;
         }
         
-        if (isStable() && !((SemanticRelease) o).isStable())
+        if (isStable() && !((SemanticVersion) o).isStable())
         {
             return 1;
         }
         
-        if (isAlpha() && !((SemanticRelease) o).isAlpha())
+        if (isAlpha() && !((SemanticVersion) o).isAlpha())
         {
             return -1;
         }
         
-        if (isBeta() && ((SemanticRelease) o).isAlpha())
+        if (isBeta() && ((SemanticVersion) o).isAlpha())
         {
             return 1;
         }
         
-        if (isBeta() && !((SemanticRelease) o).isBeta())
+        if (isBeta() && !((SemanticVersion) o).isBeta())
         {
             return -1;
         }
         
-        if (!isStable() && ((SemanticRelease) o).isStable())
+        if (!isStable() && ((SemanticVersion) o).isStable())
         {
             return -1;
         }
         
-        if (qualifier == null && ((SemanticRelease) o).qualifier != null)
+        if (qualifier == null && ((SemanticVersion) o).qualifier != null)
         {
             return 1;
         }
         
-        if (qualifier.equals(((SemanticRelease) o).qualifier))
+        if (qualifier.equals(((SemanticVersion) o).qualifier))
         {
-            if (build != ((SemanticRelease) o).build)
+            if (build != ((SemanticVersion) o).build)
             {
-                return build < ((SemanticRelease) o).build ? -1 : 1;
+                return build < ((SemanticVersion) o).build ? -1 : 1;
             }
         }
         
@@ -273,12 +287,12 @@ public class SemanticRelease extends Version implements Release
             return false;
         }
         
-        if (!(obj instanceof SemanticRelease))
+        if (!(obj instanceof SemanticVersion))
         {
             return false;
         }
         
-        SemanticRelease other = (SemanticRelease) obj;
+        SemanticVersion other = (SemanticVersion) obj;
         
         if (build != other.build)
         {

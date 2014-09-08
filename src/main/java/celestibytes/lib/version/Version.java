@@ -157,17 +157,17 @@ public abstract class Version implements Comparable<Version>
         }
         else if (qualifier.equalsIgnoreCase(""))
         {
-            return new SemanticRelease(major, minor, patch);
+            return new SemanticVersion(major, minor, patch);
         }
         else
         {
             if (build.equalsIgnoreCase(""))
             {
-                return new SemanticRelease(major, minor, patch, qualifier);
+                return new SemanticVersion(major, minor, patch, qualifier);
             }
             else
             {
-                return new SemanticRelease(major, minor, patch, qualifier, build);
+                return new SemanticVersion(major, minor, patch, qualifier, build);
             }
         }
     }

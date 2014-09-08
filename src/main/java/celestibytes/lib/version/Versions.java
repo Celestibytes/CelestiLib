@@ -20,13 +20,13 @@ import java.util.Comparator;
  * An {@link Object} that contains {@link Version}-related utility methods.
  * <p/>
  * You should always use the methods in this class instead of methods in
- * {@link Version} or it's subtypes ({@link BigRelease}, {@link SemanticRelease},
+ * {@link Version} or it's subtypes ({@link BigVersion}, {@link SemanticVersion},
  * {@link Snapshot}).
  *
  * @author PizzAna
  * @see Version
- * @see BigRelease
- * @see SemanticRelease
+ * @see BigVersion
+ * @see SemanticVersion
  * @see Snapshot
  */
 public final class Versions
@@ -91,9 +91,90 @@ public final class Versions
                 return 1;
             }
             
-            if (true)
+            if (o1.isRelease() && o2.isRelease())
             {
-                // TODO Remove. This is here to prevent annoying errors.
+                Release r1 = (Release) o1;
+                Release r2 = (Release) o2;
+                
+                if (r1.getPatch() != r2.getPatch())
+                {
+                    return r1.getPatch() < r2.getPatch() ? -1 : 1;
+                }
+                
+                if (r1.isStable() && !r2.isStable())
+                {
+                    return 1;
+                }
+                
+                if (o1 instanceof BigVersion && o2 instanceof BigVersion)
+                {
+                    BigVersion b1 = (BigVersion) o1;
+                    BigVersion b2 = (BigVersion) o2;
+                    
+                    if (b1.build != b2.build)
+                    {
+                        return b1.build < b2.build ? -1 : 1;
+                    }
+                }
+                
+                if (o1 instanceof SemanticVersion && o2 instanceof SemanticVersion)
+                {
+                    SemanticVersion s1 = (SemanticVersion) o1;
+                    SemanticVersion s2 = (SemanticVersion) o2;
+                    
+                    if (s1.isAlpha() && !s2.isAlpha())
+                    {
+                        return -1;
+                    }
+                    
+                    if (s1.isBeta() && s2.isAlpha())
+                    {
+                        return 1;
+                    }
+                    
+                    if (s1.isBeta() && !s2.isBeta())
+                    {
+                        return -1;
+                    }
+                    
+                    if (s1.qualifier == null && s2.qualifier != null)
+                    {
+                        return -1;
+                    }
+                    
+                    if (s1.qualifier.equalsIgnoreCase(s2.qualifier))
+                    {
+                        if (s1.build != s2.build)
+                        {
+                            return s1.build < s2.build ? -1 : 1;
+                        }
+                    }
+                }
+                
+                if (o1 instanceof BigVersion && o2 instanceof SemanticVersion)
+                {
+                    SemanticVersion s = (SemanticVersion) o2;
+                    
+                    if (s.qualifier != null)
+                    {
+                        return 1;
+                    }
+                }
+                
+                if (o1 instanceof SemanticVersion && o2 instanceof BigVersion)
+                {
+                    SemanticVersion s = (SemanticVersion) o1;
+                    
+                    if (s.qualifier != null)
+                    {
+                        return -1;
+                    }
+                }
+                
+                if (!r1.isStable() && r2.isStable())
+                {
+                    return -1;
+                }
             }
             
             return 0;
