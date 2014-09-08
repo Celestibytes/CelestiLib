@@ -14,14 +14,18 @@
 
 package celestibytes.lib.version;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Comparator;
 
 /**
  * An {@link Object} that contains {@link Version}-related utility methods.
  * <p/>
  * You should always use the methods in this class instead of methods in
- * {@link Version} or it's subtypes ({@link BigVersion}, {@link SemanticVersion},
- * {@link Snapshot}).
+ * {@link Version} or it's subtypes ({@link BigVersion}, {@link SemanticVersion}, {@link Snapshot}).
  *
  * @author PizzAna
  * @see Version
@@ -192,29 +196,193 @@ public final class Versions
     }
     
     /**
+     * Parses a {@link Version} from the given {@link String}.
+     *
+     * @param s
+     *            the {@link String} representing the {@link Version}.
+     * @return the {@link Version} represented by the {@link String}.
+     * @throws VersionFormatException
+     *             if the {@link String} does not contain a parsable
+     *             {@link Version}.
+     */
+    public static Version parseVersion(String s)
+    {
+        String major = "";
+        String minor = "";
+        int dots = 0;
+        boolean hyphen = false;
+        
+        String patch = "";
+        String qualifier = "";
+        String build = "";
+        
+        for (Character c : s.toCharArray())
+        {
+            if (c.equals('.'))
+            {
+                dots = dots + 1;
+            }
+            else if (c.equals('-'))
+            {
+                hyphen = true;
+            }
+            else
+            {
+                switch (dots)
+                {
+                    case 0:
+                    {
+                        major = major + c.charValue();
+                        break;
+                    }
+                    case 1:
+                    {
+                        if (hyphen)
+                        {
+                            qualifier = qualifier + c.toString();
+                        }
+                        else
+                        {
+                            minor = minor + c.toString();
+                        }
+                        break;
+                    }
+                    case 2:
+                    {
+                        if (hyphen)
+                        {
+                            qualifier = qualifier + c.toString();
+                        }
+                        else
+                        {
+                            patch = patch + c.toString();
+                        }
+                        break;
+                    }
+                    case 3:
+                    {
+                        build = build + c.toString();
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (major.equals("") || minor.equals(""))
+        {
+            throw new VersionFormatException("Major or minor may not be null");
+        }
+        
+        if (qualifier.equalsIgnoreCase(Versions.SNAPSHOT))
+        {
+            return new Snapshot(major, minor);
+        }
+        else if (qualifier.equalsIgnoreCase(""))
+        {
+            return new SemanticVersion(major, minor, patch);
+        }
+        else
+        {
+            if (build.equalsIgnoreCase(""))
+            {
+                return new SemanticVersion(major, minor, patch, qualifier);
+            }
+            else
+            {
+                return new SemanticVersion(major, minor, patch, qualifier, build);
+            }
+        }
+    }
+    
+    /**
+     * Parses a {@link Version} from the given {@link URL}.
+     *
+     * @param url
+     *            the {@link URL}.
+     * @return the {@link Version} represented by the {@link URL}.
+     * @throws IOException
+     *             if the {@link URL} cannot be read.
+     * @throws VersionFormatException
+     *             if the {@link URL} does not contain a parsable
+     *             {@link Version}.
+     */
+    public static Version parseFromUrl(URL url) throws IOException
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        Version ret = parseVersion(reader.readLine());
+        reader.close();
+        return ret;
+    }
+    
+    /**
+     * Parses a {@link Version} from the given url.
+     *
+     * @param s
+     *            the url.
+     * @return the {@link Version} represented by the url.
+     * @throws MalformedURLException
+     *             if the url is invalid.
+     * @throws IOException
+     *             if the url cannot be read.
+     * @throws VersionFormatException
+     *             if the url does not contain a parsable {@link Version}.
+     */
+    public static Version parseFromUrl(String s) throws MalformedURLException, IOException
+    {
+        return parseFromUrl(new URL(s));
+    }
+    
+    /**
+     * Gives the hash code of the {@link Version}.
+     * 
+     * @param v
+     *            the {@link Version}.
+     * @return the hash code of the {@link Version}.
+     * @see Version#hashCode()
+     * @see BigVersion#hashCode()
+     * @see SemanticVersion#hashCode()
+     * @see Snapshot#hashCode()
+     * @see Object#hashCode()
+     */
+    public static int hashCode(Version v)
+    {
+        return v.hashCode();
+    }
+    
+    /**
      * Checks if two {@link Version}s are equal.
      * 
-     * @param arg0
+     * @param v
      *            the first {@link Version}.
-     * @param arg1
+     * @param v1
      *            the second {@link Version}.
      * @return {@code true} if the two {@link Version}s are equal, otherwise
      *         {@code false}.
+     * @see Version#equals(Object)
+     * @see BigVersion#equals(Object)
+     * @see SemanticVersion#equals(Object)
+     * @see Snapshot#equals(Object)
+     * @see Object#equals(Object)
      */
-    public static boolean equals(Version arg0, Version arg1)
+    public static boolean equals(Version v, Version v1)
     {
-        return (arg0.equals(arg1) && comparator.compare(arg0, arg1) == 0) || arg0 == null && arg1 == null;
+        return (v.equals(v1) && comparator.compare(v, v1) == 0) || v == null && v1 == null;
     }
     
     /**
      * Returns a {@link String} that represents the given {@link Version}.
      * 
-     * @param version
+     * @param v
      *            the {@link Version}.
      * @return the {@link String} representing the {@link Version}.
+     * @see Version#toString()
+     * @see BigVersion#toString()
+     * @see SemanticVersion#toString()
+     * @see Snapshot#toString()
+     * @see Object#toString()
      */
-    public static String toString(Version version)
+    public static String toString(Version v)
     {
-        return version == null ? "" : version.toString();
+        return v == null ? "" : v.toString();
     }
 }
