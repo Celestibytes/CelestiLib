@@ -15,10 +15,12 @@
 package celestibytes.lib.version;
 
 /**
- * An {@link Object}
+ * A {@link Version} that supports "x.y.z(-qualifier(.build))" format.
  *
  * @author PizzAna
- *
+ * 
+ * @see Versions
+ * @see Version
  */
 public class Release extends Version
 {
@@ -195,6 +197,11 @@ public class Release extends Version
             return super.compareTo(o);
         }
         
+        if (!(o instanceof Release))
+        {
+            // TODO Is this necessary?
+        }
+        
         if (patch != ((Release) o).patch)
         {
             return patch < ((Release) o).patch ? -1 : 1;
@@ -300,7 +307,7 @@ public class Release extends Version
     @Override
     public String toString()
     {
-        return isStable() ? major + "." + minor + "." + patch : build != 0 ? major + "." + minor + "." + patch + "-"
-                + qualifier + "." + build : major + "." + minor + "." + patch + "-" + qualifier;
+        return isStable() ? super.toString() + "." + patch : build != 0 ? super.toString() + "." + patch + "-"
+                + qualifier + "." + build : super.toString() + "." + patch + "-" + qualifier;
     }
 }

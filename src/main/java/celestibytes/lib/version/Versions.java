@@ -18,9 +18,14 @@ import java.util.Comparator;
 
 /**
  * An {@link Object} that contains {@link Version}-related utility methods.
+ * <p/>
+ * You should always use the methods in this class instead of methods in
+ * {@link Version} or it's subtypes ({@link BigRelease}, {@link Release},
+ * {@link Snapshot}).
  *
  * @author PizzAna
  * @see Version
+ * @see BigRelease
  * @see Release
  * @see Snapshot
  */

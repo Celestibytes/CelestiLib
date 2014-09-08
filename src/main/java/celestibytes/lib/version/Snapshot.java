@@ -15,10 +15,12 @@
 package celestibytes.lib.version;
 
 /**
- * An {@link Object}
+ * A {@link Version} that supports "x.y-SNAPSHOT" format.
  *
  * @author PizzAna
  *
+ * @see Versions
+ * @see Version
  */
 public class Snapshot extends Version
 {

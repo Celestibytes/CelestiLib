@@ -22,9 +22,13 @@ import java.net.URL;
 
 /**
  * An {@link Object} that contains common version information.
+ * <p/>
+ * You should use methods in {@link Versions} instead of ones in this class or
+ * subtypes.
  *
  * @author PizzAna
  *
+ * @see Versions
  */
 public abstract class Version implements Comparable<Version>
 {
@@ -216,7 +220,7 @@ public abstract class Version implements Comparable<Version>
      */
     public boolean isRelease()
     {
-        return this instanceof Release;
+        return this instanceof Release || this instanceof BigRelease;
     }
     
     /**
