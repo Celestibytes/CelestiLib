@@ -17,10 +17,11 @@ package celestibytes.lib.version;
 /**
  * A {@link Version} that supports "x.y.z(-qualifier(.build))" format.
  * <p/>
- * A {@link SemanticVersion} with a qualifier is treated as lower level version that a {@link BigVersion}.
+ * A {@link SemanticVersion} with a qualifier is treated as lower level version
+ * that a {@link BigVersion}.
  *
  * @author PizzAna
- * 
+ *
  * @see Versions
  * @see Version
  * @see Release
@@ -189,7 +190,7 @@ public class SemanticVersion extends Version implements Release
     
     /**
      * Gives the patch version number of this {@link Release}.
-     * 
+     *
      * @return the patch version number.
      */
     @Override

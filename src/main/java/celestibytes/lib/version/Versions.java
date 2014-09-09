@@ -52,7 +52,7 @@ public final class Versions
     
     /**
      * An {@link Comparator} that is used to compare two {@link Version}s.
-     * 
+     *
      * @see Comparator
      */
     public static final Comparator<Version> comparator = new Comparator<Version>()
@@ -96,7 +96,7 @@ public final class Versions
             }
             
             if (o1.isRelease() && o2.isRelease())
-            {                
+            {
                 if (o1 instanceof BigVersion && o2 instanceof BigVersion)
                 {
                     BigVersion b1 = (BigVersion) o1;
@@ -226,7 +226,7 @@ public final class Versions
      *             if the {@link String} does not contain a parsable
      *             {@link Version}.
      */
-    public static Version parseVersion(String s)
+    public static Version parse(String s)
     {
         String major = "";
         String minor = "";
@@ -337,7 +337,7 @@ public final class Versions
     public static Version parseFromUrl(URL url) throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        Version ret = parseVersion(reader.readLine());
+        Version ret = parse(reader.readLine());
         reader.close();
         return ret;
     }
@@ -362,7 +362,7 @@ public final class Versions
     
     /**
      * Gives the hash code of the {@link Version}.
-     * 
+     *
      * @param v
      *            the {@link Version}.
      * @return the hash code of the {@link Version}.
@@ -379,7 +379,7 @@ public final class Versions
     
     /**
      * Checks if two {@link Version}s are equal.
-     * 
+     *
      * @param v
      *            the first {@link Version}.
      * @param v1
@@ -394,12 +394,12 @@ public final class Versions
      */
     public static boolean equals(Version v, Version v1)
     {
-        return (v.equals(v1) && comparator.compare(v, v1) == 0) || v == null && v1 == null;
+        return v.equals(v1) && comparator.compare(v, v1) == 0 || v == null && v1 == null;
     }
     
     /**
      * Returns a {@link String} that represents the given {@link Version}.
-     * 
+     *
      * @param v
      *            the {@link Version}.
      * @return the {@link String} representing the {@link Version}.

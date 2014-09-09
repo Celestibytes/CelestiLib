@@ -22,36 +22,36 @@ public class Test
 {
     public static void main(String[] args)
     {
-        System.out.println(Versions.parseVersion("2.3.1").toString());
-        System.out.println(Versions.parseVersion("2.3-SNAPSHOT").toString());
-        System.out.println(Versions.parseVersion("2.3.1-beta.5").toString());
-        System.out.println(Versions.parseVersion("2.3.1-alpha").toString());
-        System.out.println(Versions.parseVersion("2.3.1.5").toString());
+        System.out.println(Versions.parse("2.3.1").toString());
+        System.out.println(Versions.parse("2.3-SNAPSHOT").toString());
+        System.out.println(Versions.parse("2.3.1-beta.5").toString());
+        System.out.println(Versions.parse("2.3.1-alpha").toString());
+        System.out.println(Versions.parse("2.3.1.5").toString());
         
-        if (Versions.comparator.compare(Versions.parseVersion("2.3.1.5"), Versions.parseVersion("2.3.1-alpha")) > 0)
+        if (Versions.comparator.compare(Versions.parse("2.3.1.5"), Versions.parse("2.3.1-alpha")) > 0)
         {
             System.out.println("Hello World!");
         }
         
-        if (Versions.comparator.compare(Versions.parseVersion("1.2.4"), Versions.parseVersion("1.2.3.4")) > 0)
+        if (Versions.comparator.compare(Versions.parse("1.2.4"), Versions.parse("1.2.3.4")) > 0)
         {
             System.out.println("Swag");
         }
         
-        BigVersion b = (BigVersion) Versions.parseVersion("2.2.3.4");
-        SemanticVersion s = (SemanticVersion) Versions.parseVersion("2.2.4");
+        BigVersion b = (BigVersion) Versions.parse("2.2.3.4");
+        SemanticVersion s = (SemanticVersion) Versions.parse("2.2.4");
         
         if (Versions.comparator.compare(s, b) > 0)
         {
             System.out.println("Yolo");
         }
         
-        if (Versions.parseVersion("1.2.3.4") instanceof BigVersion)
+        if (Versions.parse("1.2.3.4") instanceof BigVersion)
         {
             System.out.println("Pöö");
         }
         
-        if (Versions.parseVersion("1.2.3") instanceof SemanticVersion)
+        if (Versions.parse("1.2.3") instanceof SemanticVersion)
         {
             System.out.println("Höö");
         }

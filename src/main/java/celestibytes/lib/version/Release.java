@@ -17,9 +17,9 @@ package celestibytes.lib.version;
 /**
  * An {@code interface} that is implemented by every release type
  * {@link Version}s for easier comparison.
- * 
+ *
  * @author PizzAna
- * 
+ *
  * @see Version
  * @see Versions
  * @see SemanticVersion
@@ -29,7 +29,7 @@ public interface Release
 {
     /**
      * Gives the patch version number of this {@link Release}.
-     * 
+     *
      * @return the patch version number.
      */
     public int getPatch();
