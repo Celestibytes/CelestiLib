@@ -45,36 +45,43 @@ public class LangFileSource extends FileSource {
 			String key = null, value = null, line = null;
 			String[] lineParts = null;
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-			while((line = br.readLine().trim()) != null) {
+			while((line = br.readLine()) != null) {
+				line = line.trim();
 				if(!line.startsWith("//") && !line.startsWith("#")) {
 					if(line.startsWith("meta")) {
-						if(line.equals("meta.english_language_name")) {
-							langNameEng = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.native_language_name")) {
-							langNameNative = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.translator_name")) {
-							translatorName = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.translator_twitter")) {
-							translatorTwitter = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.parent_language_code") || line.equals("meta.parent_language")) {
-							parentLanguageCode = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
+						lineParts = line.split(KEY_VALUE_SEPARATOR);
+						if(lineParts.length == 2) {
+							key = lineParts[0].trim();
+							value = lineParts[1].trim();
+							if(key.equals("meta.english_language_name")) {
+								langNameEng = value;
+							}
+							
+							if(key.equals("meta.native_language_name")) {
+								langNameNative = value;
+							}
+							
+							if(key.equals("meta.translator_name")) {
+								translatorName = value;
+							}
+							
+							if(key.equals("meta.translator_twitter")) {
+								translatorTwitter = value;
+							}
+							
+							if(key.equals("meta.parent_language_code") || key.equals("meta.parent_language")) {
+								parentLanguageCode = value;
+							}
 						}
 					} else {
 						if(ret == null) {
-							 ret = new Translation(langCode, langNameEng, langNameNative);
+							 ret = new Translation(langCode);
+							 ret.setMetadata(translatorName, translatorTwitter, parentLanguageCode, langNameEng, langNameNative);
 						}
 						lineParts = line.split(KEY_VALUE_SEPARATOR);
 						if(lineParts.length == 2) {
-							key = lineParts[0];
-							value = lineParts[1];
+							key = lineParts[0].trim();
+							value = lineParts[1].trim();
 									
 							if(key != null && value != null) {
 								ret.addTranslation(key, value);
@@ -108,38 +115,46 @@ public class LangFileSource extends FileSource {
 			String translatorName = "";
 			String translatorTwitter = "";
 			String parentLanguageCode = "";
-//			String langCode = getLangCodeFromFilename(); not used here			
 			
 			String key = null, value = null, line = null;
 			String[] lineParts = null;
+			boolean metadataSet = false;
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			while((line = br.readLine().trim()) != null) {
 				if(!line.startsWith("//") && !line.startsWith("#")) {
 					if(line.startsWith("meta")) {
-						if(line.equals("meta.english_language_name")) {
-							langNameEng = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.native_language_name")) {
-							langNameNative = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.translator_name")) {
-							translatorName = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.translator_twitter")) {
-							translatorTwitter = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-						
-						if(line.equals("meta.parent_language_code") || line.equals("meta.parent_language")) {
-							parentLanguageCode = StringUtil.getCfgStrValue(line, KEY_VALUE_SEPARATOR);
-						}
-					} else {
 						lineParts = line.split(KEY_VALUE_SEPARATOR);
 						if(lineParts.length == 2) {
-							key = lineParts[0];
-							value = lineParts[1];
+							key = lineParts[0].trim();
+							value = lineParts[1].trim();
+							if(key.equals("meta.english_language_name")) {
+								langNameEng = value;
+							}
+							
+							if(key.equals("meta.native_language_name")) {
+								langNameNative = value;
+							}
+							
+							if(key.equals("meta.translator_name")) {
+								translatorName = value;
+							}
+							
+							if(key.equals("meta.translator_twitter")) {
+								translatorTwitter = value;
+							}
+							
+							if(key.equals("meta.parent_language_code") || key.equals("meta.parent_language")) {
+								parentLanguageCode = value;
+							}
+						}
+					} else {
+						if(!metadataSet) {
+							transl.setMetadata(translatorName, translatorTwitter, parentLanguageCode, langNameEng, langNameNative);
+						}
+						lineParts = line.split(KEY_VALUE_SEPARATOR);
+						if(lineParts.length == 2) {
+							key = lineParts[0].trim();
+							value = lineParts[1].trim();
 									
 							if(key != null && value != null) {
 								transl.addTranslation(key, value);
