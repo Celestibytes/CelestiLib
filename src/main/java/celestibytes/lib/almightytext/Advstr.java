@@ -15,6 +15,10 @@ public class Advstr {
 		translHandlerArrId = TranslationHandler.registerAstr(this);
 	}
 	
+	public String[] getTranslatedWords() {
+		return this.translation != null ? this.translation.split(" ") : null;
+	}
+	
 	public String getBaseStr() {
 		return this.text;
 	}
