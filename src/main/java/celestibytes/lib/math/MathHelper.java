@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Celestibytes
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or (at your option) any
  * later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -17,7 +17,7 @@ package celestibytes.lib.math;
 import java.util.Random;
 
 /**
- * An {@link Object} containing general math related utilities.
+ * MathHelper contains general math related utilities.
  *
  * @author PizzAna
  *
@@ -25,10 +25,32 @@ import java.util.Random;
 public final class MathHelper
 {
     /**
+     * The {@code double} value that is closer than any other to <i>e</i>, the
+     * base of the natural logarithms.
+     */
+    public static final double E = Math.E;
+    
+    /**
+     * The {@code double} value that is closer than any other to <i>pi</i>, the
+     * ratio of the circumference of a circle to its diameter.
+     */
+    public static final double PI = Math.PI;
+    
+    /**
      * The instance of the {@link Random} class used in the {@link MathHelper}.
      */
     private static Random random = new Random();
-
+    
+    /**
+     * 
+     * Constructs a new {@link MathHelper}.
+     *
+     */
+    private MathHelper()
+    {
+        // You don't need instance of this.
+    }
+    
     /**
      * Clamps an {@code int} between the given minimum and maximum values.
      *
@@ -44,7 +66,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-
+    
     /**
      * Clamps an {@code double} between the given minimum and maximum values.
      *
@@ -60,7 +82,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-
+    
     /**
      * Clamps an {@code float} between the given minimum and maximum values.
      *
@@ -76,7 +98,7 @@ public final class MathHelper
     {
         return value < min ? min : value > max ? max : value;
     }
-
+    
     /**
      * Clamps an {@code int} between {@code 0} and the given maximum value.
      *
@@ -90,7 +112,7 @@ public final class MathHelper
     {
         return clampInt(value, 0, max);
     }
-
+    
     /**
      * Clamps an {@code double} between {@code 0.0D} and the given maximum
      * value.
@@ -105,7 +127,7 @@ public final class MathHelper
     {
         return clampDouble(value, 0.0D, max);
     }
-
+    
     /**
      * Clamps an {@code float} between {@code 0.0F} and the given maximum value.
      *
@@ -119,7 +141,27 @@ public final class MathHelper
     {
         return clampFloat(value, 0.0F, max);
     }
-
+    
+    /**
+     * Gives the <i>e</i> as a {@code float}.
+     * 
+     * @return the <i>e</i> as a {@code float}.
+     */
+    public static float getFloatE()
+    {
+        return ((Double) E).floatValue();
+    }
+    
+    /**
+     * Gives the <i>pi</i> as a {@code float}.
+     * 
+     * @return the <i>pi</i> as a {@code float}.
+     */
+    public static float getFloatPi()
+    {
+        return ((Double) PI).floatValue();
+    }
+    
     /**
      * Gives the next random {@code int} between {@code 0} and the given maximum
      * value.
@@ -134,7 +176,7 @@ public final class MathHelper
     {
         return nextInt(last, random, max);
     }
-
+    
     /**
      * Gives the next random {@code int} between {@code 0} and the given maximum
      * value.
@@ -152,7 +194,7 @@ public final class MathHelper
         int i = random.nextInt(max);
         return i != last ? i : nextInt(last, random, max);
     }
-
+    
     /**
      * Gives the next random {@code int}.
      *
@@ -164,7 +206,7 @@ public final class MathHelper
     {
         return nextInt(last, random);
     }
-
+    
     /**
      * Gives the next random {@code int}.
      *
@@ -178,5 +220,24 @@ public final class MathHelper
     {
         int i = random.nextInt();
         return i != last ? i : nextInt(last, random);
+    }
+    
+    /**
+     * Gives the {@code n}th Fibonacci number.
+     * 
+     * @param n
+     *            the ordinal of the wanted Fibonacci number.
+     * @return the {@code n}th Fibonacci number.
+     */
+    public static int getFibonacciNumber(int n)
+    {
+        if (n == 1 || n == 2)
+        {
+            return 1;
+        }
+        else
+        {
+            return getFibonacciNumber(n - 1) + getFibonacciNumber(n - 2);
+        }
     }
 }
