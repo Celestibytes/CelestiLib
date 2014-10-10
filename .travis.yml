@@ -8,3 +8,5 @@ env:
   global:
   - secure: nRXLJDbK2dtd3nGKEpJUgCGM3fmZ5ccasBdN8AeFl7cSQsrpgqn5heA9vPeW0lLEVvefc9ETiR+S3Mof2Vsn31av9d0o6jIRgxbwrdg1HHW6MheFvou89AXs9RcxljEY1bDtTorTpJSQt4GDoP0Lhco1SC/lyuZzgFu8v7kQPWM=
   - secure: x3LrDiGenOaKlrnsftFyLlQ2pOdvAGsqHOvwwR9Q6T0gwCfzc5OghggJatF4Kp+8pmQ1Bq5HJXDFp5LrYlZoCTzgP6cqxspsQtEan0/gkdSi9fiuTMGB2W56fSQGWAe/sFpgLkSWMbCbjQACVI/yguJFgJR0ijQoYDd+ufAJZ5k=
+after_success:
+- publish.sh
