@@ -7,58 +7,28 @@
  * @author PizzAna
  */
 
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.6.1'
+	}
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'signing'
+apply plugin: 'nexus'
 
 version = '0.5-SNAPSHOT'
 group 'io.github.celestibytes'
 archivesBaseName = project.getName()
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives jar, javadocJar, sourcesJar
-}
-
-signing {
-    required {gradle.taskGraph.hasTask("uploadArchives")}
-    sign configurations.archives
-}
-
-/* uploadArchives {
-    repositories {
-        if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword"))
-        {
-            mavenDeployer {
-                beforeDeployment {MavenDeployment deployment -> signing.signPom(deployment)}
-
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                pom {
-                    groupId = project.group
-                    version = project.version
-                    artifactId = project.archivesBaseName
-                }
-
-                pom.project {
-                    name project.archivesBaseName
+modifyPom {
+	project {
+		name project.archivesBaseName
                     packaging 'jar'
                     description 'Celestibytes\'s Common Java Library.'
                     url 'https://github.com/Celestibytes/CelestiLib'
@@ -93,17 +63,14 @@ signing {
 							roles {role 'developer'}
 						}
                     }
-                }
-            }
-        }
-        else
-        {
-            add project.repositories.mavenLocal()
-            logger.info('Publishing to repo folder')
+	}
+}
 
-            mavenDeployer {
-                repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
-            }
-        }
-    }
-} */
+nexus {
+  attachJavadoc = true
+  attachSources = true
+  attachTests = true
+  sign = true
+  repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+  snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+}
