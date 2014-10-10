@@ -36,7 +36,7 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
+/* uploadArchives {
     repositories {
         if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword"))
         {
@@ -106,4 +106,4 @@ uploadArchives {
             }
         }
     }
-}
+} */
