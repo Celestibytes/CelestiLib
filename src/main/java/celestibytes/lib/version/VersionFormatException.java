@@ -16,7 +16,7 @@ package celestibytes.lib.version;
 
 /**
  * An {@link IllegalArgumentException} that is thrown to indicate that the
- * application has attempted to convert a string to a {@link Version}, but that
+ * application has attempted to convert a string to a {@link Version}, but
  * the string does not have the appropriate format.
  *
  * @author PizzAna

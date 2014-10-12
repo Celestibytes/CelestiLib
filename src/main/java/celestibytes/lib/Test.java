@@ -22,6 +22,15 @@ public class Test
 {
     public static void main(String[] args)
     {
+        byte x = (byte) -6;
+        
+        System.out.println(x);
+        System.out.println(Integer.toHexString(x));
+        System.out.println(Integer.MIN_VALUE);
+        
+        System.out.println(Long.toBinaryString(1 << 63));
+        System.out.println(Integer.MAX_VALUE);
+        
         System.out.println(Versions.parse("2.3.1").toString());
         System.out.println(Versions.parse("2.3-SNAPSHOT").toString());
         System.out.println(Versions.parse("2.3.1-beta.5").toString());
