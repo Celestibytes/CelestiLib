@@ -72,7 +72,7 @@ public abstract class ResourceImage implements IResource {
 				try {
 					if(res.getRespath().getFile().exists()) {
 						if(res.getRespath().getFile().isDirectory()) {
-							return 
+							return res; // return something else?
 						}
 					}
 				} catch(Throwable e) {
