@@ -13,6 +13,11 @@ public class PileList<VTYPE> {
 	private ItemIter<VTYPE> iiter;
 	private RItemIter<VTYPE> revIiter;
 	
+	private int limit = -1;
+	private int count = 0;
+	private boolean limitMethod;
+	private boolean deleteLast; // TODO: implement the usage of these!
+	
 	
 	public PileList() {
 		iter = new PLIIter<VTYPE>();
@@ -22,9 +27,29 @@ public class PileList<VTYPE> {
 		revIiter = new RItemIter<VTYPE>();
 	}
 	
+	/** Set limitMethod to false to discard excess added items, true to delete the first or the last depending on deleteLast before adding new one */
+	public PileList(int limit, boolean limitMethod, boolean deleteLast) {
+		this();
+		this.limit = limit;
+		this.limitMethod = limitMethod;
+		this.deleteLast = deleteLast;
+	}
 	
 	public void addItem(VTYPE item) {
 		PileListItem<VTYPE> buf = new PileListItem<VTYPE>(this, item, last, null);
+		
+		if(count >= limit) {
+			if(limitMethod) {
+				if(deleteLast) {
+					removeLast();
+				} else {
+					removeFirst();
+				}
+			} else {
+				System.err.println("PileList full, remove the limit or remve items from the list!");
+				return;
+			}
+		}
 		
 		if(first == null) {
 			first = buf;
@@ -32,6 +57,7 @@ public class PileList<VTYPE> {
 			last.next = buf;
 		}
 		last = buf;
+		count++;
 	}
 	
 	public VTYPE getFirst() {
@@ -59,6 +85,7 @@ public class PileList<VTYPE> {
 		
 		last.prev.next = null;
 		last = last.prev;
+		count--;
 	}
 	
 	public void removeFirst() {
@@ -71,23 +98,28 @@ public class PileList<VTYPE> {
 		}
 		first.next.prev = null;
 		first = first.next;
+		count--;
 	}
 	
 	public Iterator<PileListItem<VTYPE>> getPileListItemIterator(boolean reversed) {
 		if(reversed) {
 			revIter.setCurr(last);
+			revIter.firstRun = true;
 			return revIter;
 		}
 		iter.setCurr(first);
+		iter.firstRun = true;
 		return iter;
 	}
 	
 	public Iterator<VTYPE> getItemIterator(boolean reversed) {
 		if(reversed) {
 			revIiter.setCurr(last);
+			revIiter.firstRun = true;
 			return revIiter;
 		}
 		iiter.setCurr(first);
+		iiter.firstRun = true;
 		return iiter;
 	}
 	
@@ -139,12 +171,15 @@ public class PileList<VTYPE> {
 				next.prev = prev;
 				prev.next = next;
 			}
+			owner.count--;
 		}
+		
 	}
 	
 	private static class PLIIter<VTYPE> implements Iterator<PileListItem<VTYPE>> {
 
 		private PileListItem<VTYPE> curr = null;
+		private boolean firstRun = true;
 		
 		@Override
 		public boolean hasNext() {
@@ -158,7 +193,11 @@ public class PileList<VTYPE> {
 		@Override
 		public PileListItem<VTYPE> next() {
 			if(curr != null) {
-				curr = curr.next;
+				if(!firstRun) {
+					curr = curr.next;
+				} else {
+					firstRun = false;
+				}
 				return curr;
 			}
 			
@@ -180,6 +219,7 @@ public class PileList<VTYPE> {
 	private static class RPLIIter<VTYPE> implements Iterator<PileListItem<VTYPE>> {
 
 		private PileListItem<VTYPE> curr = null;
+		private boolean firstRun = true;
 		
 		@Override
 		public boolean hasNext() {
@@ -193,7 +233,11 @@ public class PileList<VTYPE> {
 		@Override
 		public PileListItem<VTYPE> next() {
 			if(curr != null) {
-				curr = curr.prev;
+				if(!firstRun) {
+					curr = curr.prev;
+				} else {
+					firstRun = false;
+				}
 				return curr;
 			}
 			
@@ -215,6 +259,7 @@ public class PileList<VTYPE> {
 	private static class ItemIter<VTYPE> implements Iterator<VTYPE> {
 
 		private PileListItem<VTYPE> curr = null;
+		private boolean firstRun = true;
 		
 		@Override
 		public boolean hasNext() {
@@ -228,7 +273,11 @@ public class PileList<VTYPE> {
 		@Override
 		public VTYPE next() {
 			if(curr != null) {
-				curr = curr.next;
+				if(!firstRun) {
+					curr = curr.next;
+				} else {
+					firstRun = false;
+				}
 				return curr.item;
 			}
 			
@@ -250,6 +299,7 @@ public class PileList<VTYPE> {
 	private static class RItemIter<VTYPE> implements Iterator<VTYPE> {
 
 		private PileListItem<VTYPE> curr = null;
+		private boolean firstRun = true;
 		
 		@Override
 		public boolean hasNext() {
@@ -263,7 +313,11 @@ public class PileList<VTYPE> {
 		@Override
 		public VTYPE next() {
 			if(curr != null) {
-				curr = curr.prev;
+				if(!firstRun) {
+					curr = curr.prev;
+				} else {
+					firstRun = false;
+				}
 				return curr.item;
 			}
 			
