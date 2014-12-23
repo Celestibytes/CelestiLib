@@ -16,7 +16,7 @@ public class PileList<VTYPE> {
 	private int limit = -1;
 	private int count = 0;
 	private boolean limitMethod;
-	private boolean deleteLast; // TODO: implement the usage of these!
+	private boolean deleteLast;
 	
 	
 	public PileList() {
@@ -46,7 +46,7 @@ public class PileList<VTYPE> {
 					removeFirst();
 				}
 			} else {
-				System.err.println("PileList full, remove the limit or remve items from the list!");
+				System.err.println("PileList full, remove the limit or remove items from the list!");
 				return;
 			}
 		}
@@ -58,6 +58,26 @@ public class PileList<VTYPE> {
 		}
 		last = buf;
 		count++;
+	}
+	
+	/** Removes the first item on the list and then returns it */
+	public VTYPE popFirst() {
+		if(first == null) {
+			return null;
+		}
+		VTYPE ret = first.item;
+		removeFirst();
+		return ret;
+	}
+	
+	/** Removes the last item on the list and then returns it */
+	public VTYPE popLast() {
+		if(last == null) {
+			return null;
+		}
+		VTYPE ret = last.item;
+		removeLast();
+		return ret;
 	}
 	
 	public VTYPE getFirst() {
