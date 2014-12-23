@@ -1,7 +1,9 @@
 package celestibytes.lib.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Registry<KEYTYPE, VALUE> {
 	
@@ -71,5 +73,13 @@ public class Registry<KEYTYPE, VALUE> {
 	/** Sets the nullValue to null, same as calling setNullValue with null */
 	public void clearNullValue() {
 		this.nullValue = null;
+	}
+	
+	public Iterator<Entry<KEYTYPE, VALUE>> getMapIterator() {
+		return registeredValues.entrySet().iterator();
+	}
+	
+	public void removeByKey(KEYTYPE key) {
+		registeredValues.remove(key);
 	}
 }
