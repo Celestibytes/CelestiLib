@@ -1,76 +1,254 @@
-/**
- * Celestibytes's Common Java Library
- * CelestiLib
- *
- * Master build file
- *
- * @author PizzAna
- */
-
-buildscript {
-	repositories {
-		jcenter()
-	}
-	dependencies {
-		classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.6.1'
-	}
-}
-
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'nexus'
+apply plugin: 'signing'
 
-version = '0.5-SNAPSHOT'
-group 'io.github.celestibytes'
-archivesBaseName = project.getName()
+ext.configFile = file "build.properties"
 
-modifyPom {
-	project {
-		name project.archivesBaseName
-                    packaging 'jar'
-                    description 'Celestibytes\'s Common Java Library.'
-                    url 'https://github.com/Celestibytes/CelestiLib'
-
-                    scm {
-                        url 'https://github.com/Celestibytes/CelestiLib'
-                        connection 'scm:git:git://github.com/Celestibytes/CelestiLib.git'
-                        developerConnection 'scm:git:git@github.com:Celestibytes/CelestiLib.git'
-                    }
-
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/Celestibytes/CelestiLib/issues'
-                    }
-
-					licenses {
-                        license {
-                            name 'GNU LESSER GENERAL PUBLIC LICENSE v3'
-                            url 'http://www.gnu.org/licenses/lgpl-3.0.html'
-                        }
-                    }
-                    
-                    developers {
-                        developer {
-                            id 'pizzana'
-                            name 'PizzAna'
-                            roles {role 'developer'}
-                        }
-						developer {
-							id 'okkapel'
-							name 'Okkapel'
-							roles {role 'developer'}
-						}
-                    }
-	}
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
 }
 
-nexus {
-  attachJavadoc = true
-  attachSources = true
-  attachTests = true
-  sign = true
-  repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-  snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+ext.patch = config.patch_number
+ext.resetPatch = false
+
+if (!config.last_release.equals(config.mod_version))
+{
+    ext.patch = 0
+
+    if (gradle.startParameter.taskNames.contains("release"))
+    {
+        ext.resetPatch = true
+    }
+}
+
+if (!config.dev_version.equals(config.mod_version))
+{
+    ext.patch = 0
+}
+
+if (gradle.startParameter.taskNames.contains("release"))
+{
+    version = "${config.mod_version}.${ext.patch}"
+}
+else if (gradle.startParameter.taskNames.contains("buildPublic"))
+{
+    version = "${config.dev_version}.${ext.patch}.public.${config.build_number}"
+}
+else if (System.getenv("TRAVIS") || System.getenv("TRAVIS").equals("true"))
+{
+    version = "${config.dev_version}.${ext.patch}-SNAPSHOT"
+}
+else
+{
+    version = "${config.dev_version}.${ext.patch}.dev.${config.build_number}"
+}
+
+group = "io.github.celestibytes"
+archivesBaseName = project.getName()
+
+tasks.withType(JavaCompile) {
+    options.incremental = true
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+
+    extension = 'jar'
+    classifier = 'javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+
+    extension = 'jar'
+    classifier = 'sources'
+}
+
+artifacts {
+    archives deobfJar, javadocJar, sourcesJar
+}
+
+signing {
+    required {
+        gradle.taskGraph.hasTask("release")
+    }
+
+    sign configurations.archives
+}
+
+ext.ossrh = false
+ext.username = null
+ext.password = null
+
+if (System.getenv().containsKey("OSSRH_USERNAME") && System.getenv().containsKey("OSSRH_PASSWORD"))
+{
+	logger.lifecycle "Environment variables for Sonatype found"
+    ext.ossrh = true
+    ext.username = System.getenv("OSSRH_USERNAME")
+    ext.password = System.getenv("OSSRH_PASSWORD")
+}
+else if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword"))
+{
+	logger.lifecycle "Local variables for Sonatype found"
+    ext.ossrh = true
+    ext.username = ossrhUsername
+    ext.password = ossrhPassword
+}
+
+uploadArchives {
+    repositories {
+        if (!gradle.startParameter.taskNames.contains("buildPublic"))
+        {
+            if (ossrh)
+            {
+                mavenDeployer {
+                    beforeDeployment {
+                        MavenDeployment deployment -> signing.signPom(deployment)
+                    }
+
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                        authentication(userName: username, password: password)
+                    }
+
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                        authentication(userName: username, password: password)
+                    }
+
+                    pom {
+                        groupId = project.group
+                        version = project.version
+                        artifactId = project.archivesBaseName
+                    }
+
+                    pom.project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'A common Java library'
+                        url 'https://github.com/Celestibytes/CelestiLib'
+
+                        scm {
+                            url 'https://github.com/Celestibytes/CelestiLib'
+                            connection 'scm:git:git://github.com/Celestibytes/CelestiLib.git'
+                            developerConnection 'scm:git:git@github.com:Celestibytes/CelestiLib.git'
+                        }
+
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/Celestibytes/CelestiLib/issues'
+                        }
+
+                        licenses {
+                            license {
+                            	name 'GNU LESSER GENERAL PUBLIC LICENSE v3'
+                            	url 'http://www.gnu.org/licenses/lgpl-3.0.html'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'pizzana'
+                                name 'Antti Kivi'
+                                roles {
+                                    role 'developer'
+                                }
+                            }
+                            developer {
+                            	id 'okkapel'
+                            	name 'Okkapel'
+                            	roles {
+                            	    role 'developer'
+                            	}
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                add project.repositories.mavenLocal()
+                logger.lifecycle('Publishing to repo folder')
+
+                mavenDeployer {
+                    repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
+                }
+            }
+        }
+    }
+}
+
+task handleVersion {
+    onlyIf {
+        !gradle.startParameter.taskNames.contains("buildPublic")
+    }
+
+    doLast {
+        config.build_number = (config.build_number.toString().toInteger()) + 1
+        configFile.withWriter {
+            config.toProperties().store(it, "")
+        }
+
+        if (project.resetPatch)
+        {
+            config.patch_number = 1
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+
+            config.last_new_release = true
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+
+            config.last_release = config.mod_version
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+        }
+        else if (gradle.startParameter.taskNames.contains("release"))
+        {
+            config.patch_number = (config.patch_number.toString().toInteger()) + 1
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+
+            config.last_new_release = false
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+
+            config.last_release = config.mod_version
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+        }
+
+        def dev = config.dev_version.toString().tokenize('.');
+        def ver = config.mod_version.toString().tokenize('.');
+
+        if ((dev.get(0).toInteger() < ver.get(0).toInteger()) || (dev.get(1).toInteger() < ver.get(1).toInteger()))
+        {
+            config.dev_version = config.mod_version
+            configFile.withWriter {
+                config.toProperties().store(it, "")
+            }
+        }
+    }
+}
+
+tasks.build.dependsOn handleVersion
+
+task buildPublic(dependsOn: ['build', 'reobf', 'deobfJar']) {
+    doLast {
+        logger.lifecycle "I think I'm done"
+    }
+}
+
+task release(dependsOn: ['uploadArchives', 'build', 'reobf', 'deobfJar']) {
+    doLast {
+        logger.lifecycle "I think I'm done"
+    }
 }
