@@ -57,12 +57,12 @@ public class Test
         
         if (Versions.parse("1.2.3.4") instanceof BigVersion)
         {
-            System.out.println("Pöö");
+            System.out.println("p");
         }
         
         if (Versions.parse("1.2.3") instanceof SemanticVersion)
         {
-            System.out.println("Höö");
+            System.out.println("h");
         }
     }
 
