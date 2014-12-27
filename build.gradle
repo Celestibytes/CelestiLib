@@ -69,7 +69,7 @@ task sourcesJar(type: Jar) {
 }
 
 artifacts {
-    archives deobfJar, javadocJar, sourcesJar
+    archives javadocJar, sourcesJar
 }
 
 signing {
