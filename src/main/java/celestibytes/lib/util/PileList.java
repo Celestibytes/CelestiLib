@@ -35,10 +35,14 @@ public class PileList<VTYPE> {
 		this.deleteLast = deleteLast;
 	}
 	
+	public boolean isFull() {
+		return limit == -1 ? false : count >= limit;
+	}
+	
 	public void addItem(VTYPE item) {
 		PileListItem<VTYPE> buf = new PileListItem<VTYPE>(this, item, last, null);
 		
-		if(count >= limit) {
+		if(count >= limit && limit != -1) {
 			if(limitMethod) {
 				if(deleteLast) {
 					removeLast();
